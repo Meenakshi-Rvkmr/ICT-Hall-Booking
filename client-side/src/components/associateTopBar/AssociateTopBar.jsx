@@ -14,7 +14,7 @@ let AssociateTopBar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h4" component="div" sx={{ flexGrow: 1 , paddingLeft:"15%"}}>
             Associate Dashboard
           </Typography>
           <Button color="inherit">Logout</Button>

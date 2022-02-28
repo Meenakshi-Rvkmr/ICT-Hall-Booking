@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Booking = require("../models/Booking");
 
-//CREATE POST
+//CREATE Booking
 router.post("/", async (req, res) => {
   const newBooking = new Booking(req.body);
   try {
@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-//GET ALL POSTS
+//GET ALL Bookings
 router.get("/", async (req, res) => {  
   try {
     let bookings = await Booking.find();

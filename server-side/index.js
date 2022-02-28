@@ -5,6 +5,7 @@ const cors = require("cors");
 
 const path = require("path");
 const bookingRoute = require("./routes/Bookings");
+const loginRoute = require("./routes/Login");
 
 const MONGO_URL = "mongodb+srv://meenakshi:qazWSX123@cluster0.llhoa.mongodb.net/ICTHallBooking?retryWrites=true&w=majority"
 
@@ -24,6 +25,7 @@ mongoose.connect(MONGO_URL, {
   });
 
   app.use("/api/bookings", bookingRoute);
+  app.use("/api/user", loginRoute);
 
   app.listen(process.env.PORT || 5000, () => {
     console.log("Backend is running");
