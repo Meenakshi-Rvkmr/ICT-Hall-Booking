@@ -1,6 +1,6 @@
 const express = require('express'); 
 const halltypesRouter = express.Router();
-const Halltypes = require("../model/HallTypeDb");
+const Halltypes = require("../models/HallTypeDb");
 
 
 //CREATE HALL TYPE

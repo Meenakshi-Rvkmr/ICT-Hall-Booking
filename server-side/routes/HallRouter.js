@@ -1,6 +1,6 @@
 const express = require('express'); 
 const hallsRouter = express.Router();
-const Halls = require("../model/HallDB");
+const Halls = require("../models/HallDB");
 
 
 //CREATE Hall
