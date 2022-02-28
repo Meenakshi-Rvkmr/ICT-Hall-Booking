@@ -6,6 +6,8 @@ const cors = require("cors");
 const path = require("path");
 const bookingRoute = require("./routes/Bookings");
 const loginRoute = require("./routes/Login");
+const hallsRouter = require("./src/routes/HallRouter");
+const halltypesRouter=require("./src/routes/HallTypeRouter");
 
 const MONGO_URL = "mongodb+srv://meenakshi:qazWSX123@cluster0.llhoa.mongodb.net/ICTHallBooking?retryWrites=true&w=majority"
 
