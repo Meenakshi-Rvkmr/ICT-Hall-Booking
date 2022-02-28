@@ -1,15 +1,29 @@
+import { useContext } from 'react';
 import './App.css';
-import Signup from './components/signup/Signup';
+import { Context } from './context/Context';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import AssociateHomePage from './pages/AssociateHomePage/AssociateHomePage';
+import LoginPage from './pages/LoginPage/LoginPage'; 
+import HallPage from './pages/HallPage/HallPage';
 
 function App() {
+  const { user } = useContext(Context);
   return (
-    <div className="App">
-      {/* <AssociateSideBar /> */}
-     {/* <AssociateHomePage /> */}
-     <Signup />
-     hello
-    </div>
+    <>
+      <Router>
+      <Routes>
+          <Route exact path="/" element={<LoginPage />} />
+          <Route path="/userHome" element={<AssociateHomePage />} />
+          <Route path="/halls" element={<HallPage />} />
+          {/* <Route path="/signup" element={<SignUp />} /> */}
+        </Routes>
+      </Router>
+    </>
+    // <div className="App">
+    
+    //  {/* <AssociateHomePage /> */}
+    //  <Login/>
+    // </div>
   );
 }
 
