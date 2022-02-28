@@ -5,7 +5,7 @@ import sidebar_theme from './SidebarTheme';
 import source from '../../assets/images/sidebar_bkg.jpg';
 import { textAlign } from '@mui/system';
 
-const Sidebar = () => {
+const HallSidebar = () => {
 
   //State variable for categories
   const [hallTypes, sethallTypes] = useState([]);
@@ -64,4 +64,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar;
+export default HallSidebar;
