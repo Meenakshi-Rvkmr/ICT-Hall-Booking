@@ -6,12 +6,12 @@ let MeetingCard = ({meeting}) => {
     <>
       <Card variant="outlined" sx={{ boxShadow: 3 , marginRight:"10px"}}>
         <div style={{height:"10px", backgroundColor:"#64b5f6"}}></div>
-        <CardContent>
-          
-          <Typography variant="h6" component="div" >
+        <CardContent>      
+         <Typography variant="h6" component="div" >
            Today's Meeting
           </Typography>
          <br/>
+         {meeting?.title && <>
           <Typography variant="h5" sx={{ mb: 1.5, textAlign:"left"}}>
            {meeting?.title}
           </Typography>
@@ -30,6 +30,14 @@ let MeetingCard = ({meeting}) => {
           <Typography sx={{ fontSize: 14, textAlign:"left" }} color="text.secondary" gutterBottom>
            <LocationOnTwoToneIcon sx={{color:"blue",paddingRight:"10px"}}/>{meeting.HallName}
           </Typography>
+          </>}
+          {
+            meeting === undefined && 
+            <Typography variant="h7" component="div" sx={{textAlign:"left", padding:"10px"}} >
+           You don't have any meetings scheduled for today!!
+          </Typography>
+          }
+          
          
         </CardContent>
         <CardActions>

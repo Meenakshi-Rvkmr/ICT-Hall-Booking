@@ -10,6 +10,7 @@ import {
 import EventIcon from "@mui/icons-material/Event";
 import CalendarViewDayIcon from "@mui/icons-material/CalendarViewDay";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import {Link} from "react-router-dom"
 
 let AssociateSideBar = () => {
   const drawerWidth = window.innerWidth * 0.17;
@@ -51,6 +52,12 @@ let AssociateSideBar = () => {
               <EventAvailableIcon />
             </ListItemIcon>
             <ListItemText primary="Schedule a Meeting" />
+          </ListItem>
+          <ListItem button key="View Halls" sx={{boxShadow: 2, padding:"15px", marginBottom:"1px"}} component={Link} to="/halls">
+            <ListItemIcon>
+              <EventAvailableIcon />
+            </ListItemIcon>
+            <ListItemText primary="View Halls" />
           </ListItem>
           <Divider />
         </List>
