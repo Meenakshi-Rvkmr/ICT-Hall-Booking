@@ -26,6 +26,8 @@ mongoose.connect(MONGO_URL, {
 
   app.use("/api/bookings", bookingRoute);
   app.use("/api/user", loginRoute);
+  app.use("/api/halls", hallsRouter);
+  app.use("/api/halltypes", halltypesRouter);
 
   app.listen(process.env.PORT || 5000, () => {
     console.log("Backend is running");
