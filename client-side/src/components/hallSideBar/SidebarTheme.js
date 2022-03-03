@@ -78,28 +78,14 @@ function textstyle1(){
            return customStyle;
      }
     
-//---------------------Text1 Style---------------------------------
 
-function textstyle2(){
-    customStyle = {        
-         fontSize: '4xl',
-         margin: '25px',
-         padding: '8px',
-         color: 'white',
-         fontWeight: '400',
-         textAlign: 'center',
-         lineHeight: '32px',
-       }
- 
-       return customStyle;
- }
 
 
  //---------------------Container1 Style---------------------------------
 
 function containerstyle1(){
     customStyle = {        
-         width: '60%',
+         width: '70%',
          marginTop: '25px',
          marginBottom: '25px',
          boxShadow : 2

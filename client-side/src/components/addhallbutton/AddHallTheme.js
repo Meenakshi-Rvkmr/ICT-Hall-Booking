@@ -12,7 +12,9 @@ function halldetail_theme(type){
         case "Heading1":
             return headerstyle1();
         case "Text1":
-            return textstyle1();      
+            return textstyle1();   
+        case "Text2":
+            return textstyle2();         
         default:
             const defaultval={};
             return defaultval;               
@@ -41,7 +43,6 @@ function flexstyle1(){
 function boxstyle1(){
    customStyle = {          
         pos: 'relative',
-        boxShadow : 2
       }
 
       return customStyle;
@@ -89,7 +90,20 @@ function textstyle1(){
  }
 
  
+ //---------------------Text2 Style---------------------------------
 
+function textstyle2(){
+    customStyle = {        
+        bg: 'white',
+        mt: '3em',       
+        cursor: 'pointer',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color:"orange",
+       }
+ 
+       return customStyle;
+ }
 
 
   

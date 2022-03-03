@@ -1,16 +1,25 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import {  Button, Grid, Paper, TextField, Typography,Box,  } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import {  Button, Grid, Paper, TextField, Typography,Box,ButtonBase,IconButton  } from "@mui/material";
 import { InputLabel,Select,MenuItem } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import validation from './validation';
 
 
 //---------Customize Styling---------------
 const paperStyle = {
-    height: "84vh",
+    height: "74vh",
     borderRadius: "15px",
   };
+
+  const Img = styled('img')({
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%',
+  });
 //-----------------------------------------
 
 //Global Variables
@@ -21,10 +30,12 @@ var dateString = moment(now).format('YYYY-MM-DD');
 var starttimeString = "";
 var endtimeString = "";
 var assignValues = {};
-
+var hallimgFilename="";
+const addImageSource="https://cdn.pixabay.com/photo/2017/11/10/05/24/add-2935429_960_720.png";
 
 const CreateHallForm = (props) => {
 
+//=========================Time Variables and associated functions================================
   if(props.ID===""){
     starttimeString=moment(now).format('HH:mm');
     endtimeString=moment(now).format('HH:mm');
@@ -48,8 +59,10 @@ const CreateHallForm = (props) => {
     setisSubmit(false);
   };
 
+//=======================================================================================================================================
 
-//--State declaration for halltypes
+
+//========================Halltypes Decalration and fecthing it from API=====================================
 const [hallTypes,setHallTypes] = useState([]);
 
 
@@ -62,17 +75,37 @@ useEffect(()=>{
     fetchHallTypes();
   },[])
 
-//State declaration for all the input variables
-var [inputValues,setinputValues]=useState(assignValues);
+//=======================================================================================================================================
 
-//For storing the values entered
+
+//=================================Input Variables declartion and functions==================================================
+
+var [inputValues,setinputValues]=useState(assignValues);
+var [imageSource,setimageSource]=useState(addImageSource);
+var [imageFile,setimageFile]=useState(null);
+
+
 const valueEntered=(event)=>{
     let { name, value } = event.target; //destructuring
-    if(name==='capacity')
-    {value=parseInt(value);}
+    
     setinputValues({ ...inputValues, [name]: value });
     setisSubmit(false);
   };
+
+  const handleUploadClick=(event)=>{    
+    var file = event.target.files[0];
+    if(file){
+      setimageFile(file);
+      var url = URL.createObjectURL(file);
+      setimageSource(url);
+    }
+  };
+
+  const handleDeleteImage=()=>{
+    if(imageSource!==addImageSource){
+      setimageSource(addImageSource);
+    }
+  }
 
   
 //State to verify success on submit
@@ -86,6 +119,9 @@ var [errorMessages,seterrorMessages]= useState({});
     event.preventDefault();
     seterrorMessages(validation(inputValues,timeValues));    
     setisSubmit(true);
+    if (imageFile) {
+      hallimgFilename = Date.now() + imageFile.name;
+    }
     sendRequestValues=senddataobject();
   };
 
@@ -94,75 +130,120 @@ var [errorMessages,seterrorMessages]= useState({});
 useEffect(()=>{
   if(Object.keys(errorMessages).length===0 && isSubmit){
     const AddHall=async()=>{
-      console.log("response.data");
       try {
+          if (imageFile) {
+            const data =new FormData();
+            data.append("name", hallimgFilename);
+            data.append("file", imageFile);            
+            try {
+              await axios.post("/upload/hallimages", data);
+            } catch (err) {
+
+            }
+          }
+
           const response=await axios.post(`/halls`, sendRequestValues);
-          if(response.data){ props.statusOperation="Success";}
-      }catch (err) { setisSubmit(false); }
-        props.statusOperation="Error";
+          if(response.data){ 
+
+            
+            props.statusOperation("success");
+          }
+
+      }catch (err) { 
+        setisSubmit(false); 
+        props.statusOperation("error");
+      }
+        
      };
     AddHall();
   }
 },[errorMessages,isSubmit]);
 
 const senddataobject=()=>{
+  console.log(hallimgFilename);
   const validValues={
     address: inputValues.address,
-    capacity: inputValues.capacity,
-    hallimg: "",
+    capacity: parseInt(inputValues.capacity),
+    hallimg: hallimgFilename,
     halltype: inputValues.halltype,
     name: inputValues.name,
-    starttime: new Date(dateString+'T'+timeValues.starttime+'Z'),
-    endtime: new Date(dateString+'T'+timeValues.endtime+'Z')
+    starttime: new Date(dateString+' '+timeValues.starttime).toISOString(),
+    endtime: new Date(dateString+' '+timeValues.endtime).toISOString()
   };
   return validValues;
+  
 };
 
+//=======================================================================================================================================
 
   return (
     <Grid mt={2}>
         <Paper elevation={20} style={paperStyle}>
             <Grid align="center">
-              <br></br>
-                <Typography component={'h2'} mx={4} mt={1}
-                            sx={{letterSpacing: "2px",fontWeight:"600",borderTop:'1px solid black',borderBottom:'1px solid black'}}>
-                Hall</Typography>
-                <Box component={'form'} sx={{ m:3,width:'75%' }} 
+                
+                <Box component={'form'} sx={{ m:3,width:'85%' }}
                      onSubmit={handleSubmit}                  
-                >
-                    <TextField 
-                        label="Name*"  sx={{ mt:2 }}
-                        placeholder="Name of the Hall"
-                        name='name'
-                        autoFocus
-                        fullWidth
-                        size="small"
-                        error={errorMessages.name? true : false}
-                        value={inputValues.name}
-                        onChange={valueEntered}
-                        />
-                        <Box height={10}  sx={{ mb:2 }}>
-                            <Typography textAlign={'left'} pl={1} sx={{fontSize:'9px',color:'red'}}>
-                              {errorMessages.name}
-                            </Typography>
-                        </Box>
-                        
-                    <TextField
-                        label="Address*"
-                        name='address'
-                        multiline
-                        rows="2"
-                        fullWidth
-                        size="small"
-                        error={errorMessages.name? true : false}
-                        value={inputValues.address}
-                        onChange={valueEntered}
-                        /> 
-                        <Box height={10} sx={{ mb:2 }}>
-                              <Typography textAlign={'left'} px={1} sx={{fontSize:'9px',color:'red'}}>
-                                {errorMessages.address}
+                >   
+
+                  <Grid ml={1} container spacing={1}>
+                    <Grid item xs={12} container alignItems={'end'} justifyContent='end' sx={{pr:'12px'}}>
+                      <IconButton size='small' onClick={handleDeleteImage}>
+                        <DeleteIcon  fontSize='1px'/>                        
+                      </IconButton>
+                    </Grid>
+                      <Grid item xs={8} container direction="column" spacing={2}>
+                      <TextField 
+                          label="Name*"  sx={{ mt:2 }}
+                          placeholder="Name of the Hall"
+                          name='name'
+                          autoFocus
+                          fullWidth
+                          size="small"
+                          error={errorMessages.name? true : false}
+                          value={inputValues.name}
+                          onChange={valueEntered}
+                          />
+                          <Box height={10}  sx={{ mb:2 }}>
+                              <Typography textAlign={'left'} pl={1} sx={{fontSize:'9px',color:'red'}}>
+                                {errorMessages.name}
                               </Typography>
-                        </Box>
+                          </Box>
+                          
+                      <TextField
+                          label="Address*"
+                          name='address'
+                          multiline
+                          rows="2"
+                          fullWidth
+                          size="small"
+                          error={errorMessages.name? true : false}
+                          value={inputValues.address}
+                          onChange={valueEntered}
+                          /> 
+                          <Box height={10} sx={{ mb:2 }}>
+                                <Typography textAlign={'left'} px={1} sx={{fontSize:'9px',color:'red'}}>
+                                  {errorMessages.address}
+                                </Typography>
+                          </Box>
+                      </Grid>
+                      <Grid item xs={3} container direction="column">                          
+                         
+                          <input
+                          accept="image/*"                          
+                          type="file" 
+                          id="btn-upload" 
+                          name="btn-upload"
+                          style={{ display: 'none' }}
+                          onChange={handleUploadClick}/>  
+
+                           <label htmlFor='btn-upload'>  
+                           <ButtonBase variant='contained' component='span' sx={{ width: 128, height: 128,border: '3px solid #9e9e9e',borderRadius:'5px' }}>
+                              <Img alt="complex" src={imageSource}/>                       
+                          </ButtonBase>  
+                          </label>      
+                                                                             
+                      </Grid>                    
+                  </Grid>
 
                     <Box
                         sx={{
