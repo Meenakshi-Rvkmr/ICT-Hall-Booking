@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import { Paper, Typography, Container, Box, Chip, Button } from '@mui/material';
+import { Paper, Typography, Container, Box, Button } from '@mui/material';
 import sidebar_theme from './SidebarTheme';
 import source from '../../assets/images/sidebar_bkg.jpg';
-import { textAlign } from '@mui/system';
 
 const HallSidebar = () => {
 
-  //State variable for categories
+  //State variable for halltypes
   const [hallTypes, sethallTypes] = useState([]);
 
-  //Fetch the categories from db
+  //Fetch the halltypes from db
   useEffect(() => {
     const fetchHallTypes = async () => {
-      // const response = await axios.get("/halltypes");
-      // sethallTypes(response.data);
-      let data = [{name:"Meeting"},{name:"Conference"}]
-      sethallTypes(data)
+      const response = await axios.get("/halltypes");
+      sethallTypes(response.data);
     };
     fetchHallTypes();
   }, [])
@@ -47,7 +44,7 @@ const HallSidebar = () => {
           <Typography sx={sidebar_theme("SubTitle1")}>Halls Available</Typography>
           <Box display="flex" width="100% ">
         {hallTypes.map((htype, key) => (           
-            <Button variant="contained" key={key} color="info" sx={{margin:"10px",padding:"10px", borderRadius:"50%"}}>{htype.name}</Button>
+            <Button variant="contained" key={key} color="info" width="100%" sx={{margin:"10px",paddingX:"10px", borderRadius:"5%"}}>{htype.name}</Button>
            
           ))}
         </Box>
