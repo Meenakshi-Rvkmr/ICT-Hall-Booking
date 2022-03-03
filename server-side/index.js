@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
+const fs=require("fs");
+const multer = require("multer");
 
 const path = require("path");
 const bookingRoute = require("./routes/Bookings");
@@ -24,6 +26,36 @@ mongoose.connect(MONGO_URL, {
   })
   .catch((error)=>{  
       console.log("error"+error.message);
+  });
+
+  app.use("/hallimages", express.static(path.join(__dirname, "/images/hall-images")));
+
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "images/hall-images");
+    },
+    filename: (req, file, cb) => {
+      cb(null, req.body.name);
+    },
+  });
+  
+  const upload = multer({ storage: storage });
+  app.post("/api/upload/hallimages", upload.single("file"), (req, res) => {
+    res.status(200).json("File has been uploaded");
+  });
+
+  const DIR = path.join(__dirname, "/images/hall-images");
+  app.delete('/api/hall/deleteimage/:imagename',function (req, res) {
+    
+      if (!req.params.imagename) {
+          return res.status(500).json('error in delete');
+      
+        } else {
+          
+          fs.unlinkSync(DIR+'/'+req.params.imagename);
+          return res.status(200).send('Successfully! Image has been Deleted');
+        }  
   });
 
   app.use("/api/bookings", bookingRoute);
