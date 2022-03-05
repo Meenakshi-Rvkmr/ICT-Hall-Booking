@@ -34,7 +34,7 @@ let AssociateSideBar = () => {
         <Toolbar />
         <br></br>
         <List>
-          <ListItem button key="Upcoming Events" sx={{padding:"15px"}}>
+          <ListItem button key="Upcoming Events" sx={{padding:"15px"}} component={Link} to="/userHome">
             <ListItemIcon>
             <Avatar sx={{bgcolor:green[800]}}> <EventIcon /></Avatar>
               

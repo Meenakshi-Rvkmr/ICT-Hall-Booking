@@ -22,12 +22,12 @@ const CalenderViewPage = () => {
   const appointments = [
     {
       title: 'Website Re-Design Plan',
-      startDate: new Date(2022, 3, 23, 9, 30),
-      endDate: new Date(2022, 3, 23, 11, 30),
+      startDate: new Date(2022, 2, 23, 9, 30),
+      endDate: new Date(2022, 2, 23, 11, 30),
     }, {
       title: 'Book Flights to San Fran for Sales Trip',
-      startDate: new Date(2022, 4, 23, 12, 0),
-      endDate: new Date(2022, 4, 23, 13, 0),
+      startDate: new Date(2022, 2, 13, 12, 0),
+      endDate: new Date(2022, 2, 13, 13, 0),
     }]
 
   const [data, setData] = useState(appointments);
@@ -44,8 +44,8 @@ const CalenderViewPage = () => {
       <Grid item xs={10}>
       <AssociateTopBar />
       <br></br>
-        <Paper sx={{boxShadow:3, margin:"10px", marginTop:"0px"}}>
-        <Scheduler  data={appointments} >
+        <Paper sx={{boxShadow:3, margin:"10px", marginTop:"0px", }}>
+        <Scheduler  data={data} views={["workWeek"]} >
           <ViewState
             defaultCurrentDate={today}
           />
