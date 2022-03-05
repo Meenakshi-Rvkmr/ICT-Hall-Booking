@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import HallPage from "./pages/HallPage/HallPage";
 import ViewAssociates from "./pages/AssociateDetails/ViewAssociates";
 import AddAssociate from "./pages/AssociateDetails/AddAssociate";
+import CalenderViewPage from "./pages/AssociateCalendarViewPage";
 
 function App() {
   const { user } = useContext(Context);
@@ -20,6 +21,7 @@ function App() {
           <Route path="/halls" element={<HallPage />} />
           {/* <Route path="/signup" element={<SignUp />} /> */}
           <Route path="/adminHome" element={<AdminHomePage />} />
+          <Route path="/calendar" element={<CalenderViewPage />} />
           <Route path="/associates" element={<ViewAssociates />} />
           <Route path="/associates/:id" element={<AddAssociate />} />
         </Routes>
