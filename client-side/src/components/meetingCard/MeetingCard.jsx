@@ -33,7 +33,7 @@ let MeetingCard = ({meeting}) => {
           </>}
           {
             meeting === undefined && 
-            <Typography variant="h7" component="div" sx={{textAlign:"left", padding:"10px"}} >
+            <Typography variant="body2" component="div" sx={{textAlign:"left", padding:"10px"}} >
            You don't have any meetings scheduled for today!!
           </Typography>
           }

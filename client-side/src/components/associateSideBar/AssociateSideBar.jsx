@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Divider,
   Drawer,
   List,
@@ -11,10 +12,10 @@ import EventIcon from "@mui/icons-material/Event";
 import CalendarViewDayIcon from "@mui/icons-material/CalendarViewDay";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import {Link} from "react-router-dom"
+import { green,blue, purple } from "@mui/material/colors";
 
 let AssociateSideBar = () => {
   const drawerWidth = window.innerWidth * 0.17;
-
   return (
     <>
       <Drawer
@@ -31,29 +32,30 @@ let AssociateSideBar = () => {
         anchor="left"
       >
         <Toolbar />
-        
+        <br></br>
         <List>
-          <ListItem button key="Upcoming Events" sx={{boxShadow: 2, padding:"15px", marginBottom:"1px"}}>
+          <ListItem button key="Upcoming Events" sx={{padding:"15px"}}>
             <ListItemIcon>
-              <EventIcon />
+            <Avatar sx={{bgcolor:green[800]}}> <EventIcon /></Avatar>
+              
             </ListItemIcon>
-            <ListItemText primary="Upcoming Events" />
+            <ListItemText primary="Upcoming Events" sx={{color:green[800]}}/>
           </ListItem>
-          <Divider />
-          <ListItem button key="Booking Requests" sx={{boxShadow: 2, padding:"15px", marginBottom:"1px"}}>
+          
+          <ListItem button key="Booking Requests" sx={{padding:"15px"}}>
             <ListItemIcon>
-              <CalendarViewDayIcon />
+            <Avatar sx={{bgcolor:blue[500]}}> <CalendarViewDayIcon /></Avatar>              
             </ListItemIcon>
-            <ListItemText primary="Booking Requests" />
+            <ListItemText primary="Booking Requests" sx={{color:blue[500]}}/>
           </ListItem>
-          <Divider />
-          <ListItem button key="Schedule a Meeting" sx={{boxShadow: 2, padding:"15px", marginBottom:"1px"}}>
+          
+          <ListItem button key="Schedule a Meeting" sx={{padding:"15px"}}>
             <ListItemIcon>
-              <EventAvailableIcon />
+            <Avatar sx={{bgcolor:purple[800]}}> < EventAvailableIcon /> </Avatar>             
             </ListItemIcon>
-            <ListItemText primary="Schedule a Meeting" />
+            <ListItemText primary="Schedule a Meeting" sx={{color:purple[800]}}/>
           </ListItem>        
-          <Divider />
+          
         </List>
       </Drawer>
     </>

@@ -10,13 +10,13 @@ let AssociateHomePage = () => {
     <>
       <Box sx={{ display: 'flex' }}>
       <Grid container spacing={3} >
-        <Grid item xs={12} >
-          <AssociateTopBar />
-        </Grid>
+        
         <Grid item xs={2} >
           <AssociateSideBar />
         </Grid>
-        <Grid item xs={10} sx={{ flexGrow: 1, pt: 3 }}>
+        <Grid item xs={10} sx={{ flexGrow: 1, paddingTop: "0px"}} pt={0}>
+        <AssociateTopBar />
+        <br></br>
          <WeekMeetings/>
         </Grid>
         
