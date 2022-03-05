@@ -18,23 +18,23 @@ const HallPage = () => {
   useEffect(() => {
     const fetchHalls = async () => {
       try {
-        //const response =await axios.get("/halls");
-        // setallHalls(response.data);
-        let data = [
-          {
-            name: "Conference Hall 1",
-            capacity: 100,
-            halltype: "Conference",
-            address:"Ground Floor, Wing A"
-          },
-          {
-            name: "Conference Hall 2",
-            capacity: 100,
-            halltype: "Conference",
-            address:"Ground Floor, Wing B"
-          }
-        ]
-        setallHalls(data);
+        const response =await axios.get("/halls");
+        setallHalls(response.data);
+        // let data = [
+        //   {
+        //     name: "Conference Hall 1",
+        //     capacity: 100,
+        //     halltype: "Conference",
+        //     address:"Ground Floor, Wing A"
+        //   },
+        //   {
+        //     name: "Conference Hall 2",
+        //     capacity: 100,
+        //     halltype: "Conference",
+        //     address:"Ground Floor, Wing B"
+        //   }
+        // ]
+       // setallHalls(data);
       } catch (err) {
       }
     }

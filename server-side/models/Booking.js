@@ -17,18 +17,15 @@ const BookingSchema = new mongoose.Schema({
         type:String,
         required:false,
     },
-    BookingDate:{
+    startDate:{
         type:Date,
         required:false,
     },
-    DurationFrom:{
-        type:String,
-        required:false,
-    },
-    DurationTo:{
-        type:String,
+    endDate:{
+        type:Date,
         required:false,
     }
+    
 },{timestamps:true});
 
 module.exports = mongoose.model("Booking", BookingSchema)

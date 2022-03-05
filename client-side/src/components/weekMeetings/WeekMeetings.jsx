@@ -20,30 +20,14 @@ let WeekMeetings = () => {
         const fetchBookings = async () => {
             let response = await axios.get("/bookings");
             let data = response.data.map((booking) => {
-                let date = new Date(booking.BookingDate);
-                let startTime = parseInt(booking.DurationFrom[0]);
-                let endTime = parseInt(booking.DurationTo[0] + booking.DurationTo[1]);
+                // let date = new Date(booking.BookingDate);
+                // let startTime = parseInt(booking.DurationFrom[0]);
+                // let endTime = parseInt(booking.DurationTo[0] + booking.DurationTo[1]);
                 return {
-                    startDate: new Date(
-                        date.getFullYear(),
-                        date.getMonth(),
-                        date.getDate(),
-                        startTime,
-                        0,
-                        0
-                    ),
-                    endDate: new Date(
-                        date.getFullYear(),
-                        date.getMonth(),
-                        date.getDate(),
-                        endTime,
-                        0,
-                        0
-                    ),
+                    startDate: new Date(booking.startDate),
+                    endDate: new Date(booking.endDate),
                     title: booking.Title,
                     HallName: booking.HallName,
-                    DurationFrom: booking.DurationFrom,
-                    DurationTo: booking.DurationTo
                 };
             });
             setSechedulerData(data);
@@ -92,7 +76,7 @@ let WeekMeetings = () => {
                     <Scheduler data={schedulerData}>
                         <WeekView startDayHour={9} endDayHour={19} cellDuration={60} />
                         <Appointments />
-                        <AppointmentTooltip showDeleteButton={true} />
+                        <AppointmentTooltip showCloseButton={true} />
                     </Scheduler>
                 </Paper>
             </Grid>

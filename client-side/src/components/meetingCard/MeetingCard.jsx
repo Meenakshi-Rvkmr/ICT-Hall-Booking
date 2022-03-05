@@ -1,6 +1,7 @@
 import { Button, Card, CardActions, CardContent, Divider, Typography } from "@mui/material";
 import LocationOnTwoToneIcon from '@mui/icons-material/LocationOnTwoTone';
 import AccessTimeTwoToneIcon from '@mui/icons-material/AccessTimeTwoTone';
+import moment from 'moment';
 let MeetingCard = ({meeting}) => {
   return (
     <>
@@ -21,7 +22,7 @@ let MeetingCard = ({meeting}) => {
           </Typography>
           <Typography variant="body2" sx={{textAlign:"left"}}>
             <AccessTimeTwoToneIcon sx={{color:"gray", paddingRight:"10px"}} />
-           {meeting.DurationFrom} to {meeting.DurationTo}
+           {moment(meeting.startDate).format('HH:mm')} to {moment(meeting.endDate).format('HH:mm')}
           </Typography>
           <Divider/>
           <Typography variant="h7" component="div" sx={{textAlign:"left", fontWeight:"medium", padding:"10px"}} >
