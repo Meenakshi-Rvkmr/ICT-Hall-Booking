@@ -52,6 +52,7 @@ let AdminSideBar = () => {
             button
             key="Booking Requests"
             sx={{  padding: "15px" }}
+            component={Link} to="/admincalendar"
           >
             <ListItemIcon>
             <Avatar sx={{bgcolor:"#1976d2"}}> <EventNoteTwoToneIcon /></Avatar>
