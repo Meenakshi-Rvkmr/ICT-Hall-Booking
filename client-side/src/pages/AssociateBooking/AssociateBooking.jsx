@@ -8,6 +8,8 @@ import isWeekend from 'date-fns/isWeekend';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import TimePicker from '@mui/lab/TimePicker';
 
+const userValue = localStorage.getItem("user") === "undefined" ? null : JSON.parse(localStorage.getItem("user"))
+
 const AssociateBooking=()=> {
   //const history = useHistory();
   const [title,setTitle] = useState('');
@@ -57,7 +59,7 @@ const AssociateBooking=()=> {
           <AppBar position="static">
             <Toolbar>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Associate name
+                {userValue.username}
               </Typography>
               <Typography variant="h6" component="div">
                 ICTAK ID
