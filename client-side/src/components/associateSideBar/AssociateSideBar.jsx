@@ -49,7 +49,7 @@ let AssociateSideBar = () => {
             <ListItemText primary="Booking Requests" sx={{color:blue[500]}}/>
           </ListItem>
           
-          <ListItem button key="Schedule a Meeting" sx={{padding:"15px"}}>
+          <ListItem button key="Schedule a Meeting" sx={{padding:"15px"}} component={Link} to="/schedule">
             <ListItemIcon>
             <Avatar sx={{bgcolor:purple[800]}}> < EventAvailableIcon /> </Avatar>             
             </ListItemIcon>

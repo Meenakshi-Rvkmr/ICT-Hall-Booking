@@ -10,6 +10,7 @@ import ViewAssociates from "./pages/AssociateDetails/ViewAssociates";
 import AddAssociate from "./pages/AssociateDetails/AddAssociate";
 import CalenderViewPage from "./pages/AssociateCalendarViewPage";
 import AdminCalenderViewPage from "./pages/AdminCalendarViewPage";
+import AssociateBooking from "./pages/AssociateBooking/AssociateBooking";
 
 function App() {
   const { user } = useContext(Context);
@@ -24,7 +25,7 @@ function App() {
           <Route path="/adminHome" element={<AdminHomePage />} />
           <Route path="/calendar" element={<CalenderViewPage />} />
           <Route path="/admincalendar" element={<AdminCalenderViewPage />} />
-          
+          <Route path="/schedule" element={<AssociateBooking/>} />
           <Route path="/associates" element={<ViewAssociates />} />
           <Route path="/associates/:id" element={<AddAssociate />} />
         </Routes>
