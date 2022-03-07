@@ -55,6 +55,8 @@ const AssociateBooking=()=> {
 
     setminStarttime(new Date(0, 0, 0, parseInt(myArray1[0])));
     setmaxEndtime(new Date(0, 0, 0, parseInt(myArray2[0]), parseInt(myArray2[1])));
+
+    setStarttime(minStarttime)
   };
 
   const PostData= async () => {
@@ -171,7 +173,7 @@ const AssociateBooking=()=> {
 
         <LocalizationProvider dateAdapter={AdapterDateFns}>
     
-            <Grid xs={12} sm={6} item >
+          <Grid xs={12} sm={6} item >
             <TimePicker
           renderInput={(params) => <TextField {...params} />}
           value={starttime}
@@ -185,7 +187,7 @@ const AssociateBooking=()=> {
         />
         </Grid>
         <Grid xs={12} sm={6} item>
-    <TimePicker
+    <TimePicker 
           renderInput={(params) => <TextField {...params} />}
           label="End time" name="endtime"
           value={endtime} 
