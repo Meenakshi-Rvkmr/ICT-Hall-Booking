@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { AppBar,Avatar, Card, CardContent, Toolbar,Container,Grid,Paper, TextField, Typography,FormControl,Select,MenuItem,InputLabel,Box,Button } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -18,12 +18,24 @@ const AssociateBooking=()=> {
   const [date, setDate] = useState(new Date());
   let [starttime, setStarttime] = useState('');
   let [endtime,setEndtime] = useState('');
-//use moments - format
+  const [allHalls,setallHalls] = useState([]) 
+  const [minStarttime,setminStarttime] = useState(new Date());
+  const [maxEndtime,setmaxEndtime] = useState(new Date());
 
-  console.log(moment().format('MMMM Do YYYY, h:mm:ss a'))
-  let sTime = moment(starttime).format("h:mm:ss p")
-  let eTime = moment(endtime).format("HH:mm:ss")
-  console.log(sTime)
+    useEffect(() => {
+    const fetchHalls = async () => {
+      try {
+        const response =await axios.get("/halls");
+        setallHalls(response.data);
+        console.log(response.data);
+          } catch (err) {
+      }
+    }
+    fetchHalls();
+  }, []);
+
+  console.log(`halls- `,allHalls);
+
    const handleTitle = (event) =>{
        setTitle(event.target.value);
        console.log(title)     
@@ -31,14 +43,24 @@ const AssociateBooking=()=> {
 
   const handleChange = (event) => {    
     setHall(event.target.value); 
-    console.log(event.target.value)
+    const result = allHalls.find( ({ _id }) => _id === event.target.value );
     
+    const temp1 = moment(result.starttime).format("HH:mm");
+    const temp2 = moment(result.endtime).format("HH:mm");
+    const myArray1 = temp1.split(":");
+    const myArray2 = temp2.split(":");
+    // minTime={new Date(0, 0, 0, 8)}
+    // maxTime={new Date(0, 0, 0, 18, 45)}
+    console.log(`myArray1`,myArray1,`myArray2`,myArray2);
+
+    setminStarttime(new Date(0, 0, 0, parseInt(myArray1[0])));
+    setmaxEndtime(new Date(0, 0, 0, parseInt(myArray2[0]), parseInt(myArray2[1])));
   };
 
   const PostData= async () => {
     try {
-      const response=await axios.post(`/api/schedule`, {
-        title:title,hall:hall,date:date,starttime:starttime,endtime:endtime
+      const response=await axios.post(`/bookings`, {
+        associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:date,starttime:starttime,endtime:endtime     
       });
     } catch (err) {}
   }
@@ -111,9 +133,9 @@ const AssociateBooking=()=> {
                             label="Hall" value={hall} onChange={handleChange}                          
                             required
                           >
-                            <MenuItem value="hall1">Hall 1</MenuItem>
-                            <MenuItem value="hall2">Hall 2</MenuItem>
-                            <MenuItem value="hall3">Hall 3</MenuItem>
+                             {allHalls?.map((hall,key)=>(
+                        <MenuItem key={key} value={hall._id}>{hall.name}</MenuItem>
+                        ))}
                           </Select>
                         </FormControl>
                       </Box>
@@ -158,8 +180,8 @@ const AssociateBooking=()=> {
             setStarttime(starttime);
             console.log(starttime);
           }}
-          minTime={new Date(0, 0, 0, 13,2)}
-          maxTime={new Date(0, 0, 0, 18, 45)}
+          minTime={minStarttime}
+          maxTime={maxEndtime}
         />
         </Grid>
         <Grid xs={12} sm={6} item>

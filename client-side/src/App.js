@@ -30,7 +30,7 @@ function App() {
           <Route path="/associates/:id" element={<AddAssociate />} />
         </Routes>
       </Router>
-    </>
+    </> 
     // <div className="App">
 
     //  {/* <AssociateHomePage /> */}

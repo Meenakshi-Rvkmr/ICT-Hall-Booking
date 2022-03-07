@@ -1,6 +1,6 @@
 //For schedule meeting module
 const mongoose = require('mongoose');
-
+    
 const booking = new mongoose.Schema({
     associateName:{
         type:String,
