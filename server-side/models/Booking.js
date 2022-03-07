@@ -1,31 +1,34 @@
-const mongoose = require("mongoose");
+//For schedule meeting module
+const mongoose = require('mongoose');
 
-const BookingSchema = new mongoose.Schema({
-    AssociateName:{
+const booking = new mongoose.Schema({
+    associateName:{
         type:String,
-        required:true,
+        required:true
     },
     ICTAKID:{
         type:String,
-        required:true,
+        required:true
     },
-    Title:{
-        type:String,
-        required:false,
+    title:{
+        type:String, required:true
     },
-    HallName:{
-        type:String,
-        required:false,
+    hall:{
+        type:String, required:true
     },
-    startDate:{
-        type:Date,
-        required:false,
+    date:{
+        type:Date, required:true
     },
-    endDate:{
-        type:Date,
-        required:false,
+    starttime:{
+        type: Date,
+        required:true
+    },
+    endtime:{
+        type: Date,
+        required:true
     }
-    
-},{timestamps:true});
+},{timestamps:true})
 
-module.exports = mongoose.model("Booking", BookingSchema)
+var Bookings = mongoose.model('bookings', booking);
+
+module.exports = Bookings;

@@ -1,4 +1,4 @@
-import React,{useState, useHistory} from 'react';
+import React,{useState} from 'react';
 import { AppBar,Avatar, Card, CardContent, Toolbar,Container,Grid,Paper, TextField, Typography,FormControl,Select,MenuItem,InputLabel,Box,Button } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -7,17 +7,23 @@ import StaticDatePicker from '@mui/lab/StaticDatePicker';
 import isWeekend from 'date-fns/isWeekend';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import TimePicker from '@mui/lab/TimePicker';
-
+import axios from 'axios';
+import moment from 'moment';
 const userValue = localStorage.getItem("user") === "undefined" ? null : JSON.parse(localStorage.getItem("user"))
 
 const AssociateBooking=()=> {
-  //const history = useHistory();
+ 
   const [title,setTitle] = useState('');
   const [hall, setHall] = useState('');
   const [date, setDate] = useState(new Date());
-  const [starttime, setStarttime] = useState(new Date('2020-01-01 12:00'));
-  const [endtime,setEndtime] = useState(new Date('2020-01-01 12:00'));
+  let [starttime, setStarttime] = useState('');
+  let [endtime,setEndtime] = useState('');
+//use moments - format
 
+  console.log(moment().format('MMMM Do YYYY, h:mm:ss a'))
+  let sTime = moment(starttime).format("h:mm:ss p")
+  let eTime = moment(endtime).format("HH:mm:ss")
+  console.log(sTime)
    const handleTitle = (event) =>{
        setTitle(event.target.value);
        console.log(title)     
@@ -29,40 +35,25 @@ const AssociateBooking=()=> {
     
   };
 
-  const PostData = async(e)=>{
-    e.preventDefault();
-
-    const res = await fetch("/scheduleRoutes",{
-        method:"POST",
-        headers:{
-            "Content-Type" : "application/json"
-        },
-        body:JSON.stringify({
-          title,hall,date,starttime,endtime
-        })
+  const PostData= async () => {
+    try {
+      const response=await axios.post(`/api/schedule`, {
+        title:title,hall:hall,date:date,starttime:starttime,endtime:endtime
       });
-
-      const data = await res.json();
-      if(res.status === 422 || !data ){
-        window.alert("UnSuccessful booking");
-        console.log('UnSuccessful booking')
-      }
-      else{
-        window.alert("Successful booking");
-        console.log('Successful booking')
-        //history.push('/calendarview')
-      }
+    } catch (err) {}
   }
+  
+   
     return (
       <>
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position="static">
             <Toolbar>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                {userValue.username}
+              {userValue.username}
               </Typography>
               <Typography variant="h6" component="div">
-                ICTAK ID
+               {userValue._id}
               </Typography>
             </Toolbar>
           </AppBar>
@@ -90,7 +81,7 @@ const AssociateBooking=()=> {
 
             <Card>
               <CardContent>
-                <form method='POST'>
+                <form>
                   <Grid
                     container
                     spacing={1}
@@ -165,6 +156,7 @@ const AssociateBooking=()=> {
           label="Start time" name="starttime" 
           onChange={(starttime) => {
             setStarttime(starttime);
+            console.log(starttime);
           }}
           minTime={new Date(0, 0, 0, 13,2)}
           maxTime={new Date(0, 0, 0, 18, 45)}
