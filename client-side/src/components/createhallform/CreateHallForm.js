@@ -216,7 +216,7 @@ const senddataobject=()=>{
                           rows="2"
                           fullWidth
                           size="small"
-                          error={errorMessages.name? true : false}
+                          error={errorMessages.address? true : false}
                           value={inputValues.address}
                           onChange={valueEntered}
                           /> 

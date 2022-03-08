@@ -18,7 +18,7 @@ const AddHall = () => {
         alert("Hall is Successfully Created") ; 
         handleClose();
         setstatusOperation("");
-        window.location.replace("/");
+        window.location.replace("/halls");
     }else{
         alert("Something went wrong...Please Try Again"); 
     }

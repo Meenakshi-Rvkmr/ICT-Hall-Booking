@@ -13,7 +13,7 @@ const SingleHallDetail = (props) => {
   const noImage = "https://redthread.uoregon.edu/files/large/affd16fd5264cab9197da4cd1a996f820e601ee4.jpg";
   const PF = "http://localhost:5000/hallimages/";
 
-  const imageSource = hall.hallimg ? (PF+hall.hallimg):noImage;
+  const imageSource = hall.hallimg ? (PF+hall.hallimg) : noImage;
 
   const capacityTypography = (hall.capacity <= 16) ? hall.capacity + " seater room" : hall.capacity + " seats ";
 
@@ -39,7 +39,7 @@ const SingleHallDetail = (props) => {
             await axios.delete(`/hall/deleteimage/${hall.hallimg}`);
           }catch(err){}
 
-          window.location.replace("/");
+          window.location.replace("/halls");
         } catch (err) {}
       } 
   }

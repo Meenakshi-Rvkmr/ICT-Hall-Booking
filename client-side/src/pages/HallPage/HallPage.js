@@ -1,54 +1,77 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-//import { useLocation } from 'react-router-dom';
-import { Box, Grid, Stack, } from '@mui/material';
+import { Box, Grid, Button, } from '@mui/material';
 import HallSidebar from '../../components/hallSideBar/HallSidebar';
 import HallList from '../../components/hall_list/HallList';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 
 
 const HallPage = () => {
 
-  //State declaration for all the posts
+  //State declaration for all the halls
   var [allHalls, setallHalls] = useState([]);
+  let [offsetValue,setoffsetValue]=useState(0);
+  let [totalDocs,settotalDocs]=useState(0);
+  let [disablePrevBtn,setdisablePrevBtn]=useState(true);
+  let [disableNextBtn,setdisableNextBtn]=useState(false);
 
-  //Search property in path to know the username if any
-  //const {search}=useLocation();
+    //Get the total count of documents
+    useEffect(() => {
+      const getTotalHalls = async () => {
+        try {
+           const response =await axios.get("/halls/counthall/all");
+             settotalDocs(response.data);
 
-  //Fetch the posts from the db
+             if (response.data <= 3){setdisableNextBtn(true);}      
+             } catch (err) {
+               console.log(err);
+         }
+      }
+      getTotalHalls();    
+    }, []);
+
+  //Fetch the halls from the db
   useEffect(() => {
     const fetchHalls = async () => {
       try {
-        const response =await axios.get("/halls");
+        const response =await axios.get(`/halls/${offsetValue}/page`);
         setallHalls(response.data);
-        // let data = [
-        //   {
-        //     name: "Conference Hall 1",
-        //     capacity: 100,
-        //     halltype: "Conference",
-        //     address:"Ground Floor, Wing A"
-        //   },
-        //   {
-        //     name: "Conference Hall 2",
-        //     capacity: 100,
-        //     halltype: "Conference",
-        //     address:"Ground Floor, Wing B"
-        //   }
-        // ]
-       // setallHalls(data);
-      } catch (err) {
+          } catch (err) {
       }
     }
     fetchHalls();
-  }, []);
+  }, [offsetValue]);
 
-  const gridStyles = {
-    backgroundImage:
-      'linear-gradient(to left,#F0F2F0,#000C40);',
-    p: 10,
+  //Previous and Next Button related functions
+  const handlePrevious = () =>{
+    let nextValue=offsetValue - 3;
+    if(disableNextBtn===true){
+      setdisableNextBtn(false);
+    }
+    
+    if (nextValue===0){
+      setdisablePrevBtn(true);
+    }
+    setoffsetValue(nextValue);  
+
   }
+
+  const handleNext = (event) =>{
+    let checkValue=offsetValue + 6;
+    if(disablePrevBtn===true){
+      setdisablePrevBtn(false);
+    }
+    let nextValue=offsetValue + 3;
+    if (checkValue>=totalDocs){
+      setdisableNextBtn(true);
+    }
+    setoffsetValue(nextValue);    
+  }
+
   return (
     <>
-      <Box {...gridStyles}>
+      <Box sx={{background: 'linear-gradient(to right, #cfd9df 30%, #e2ebf0 90%)',p:5 }}>
         <Grid container spacing={2}>
           <Grid item xs={7}>
             <HallList allHalls={allHalls} />
@@ -56,12 +79,12 @@ const HallPage = () => {
           <Grid item xs={5}>
             <HallSidebar />
           </Grid>
-        </Grid>
+        </Grid><br></br>
 
-        {/* <Paper  w='50%' ml={'4em'} alignItems='center' justifyContent={'center'} h='16'>
-              <Button mr={'3'} leftIcon={<ArrowBackIcon />}>Previous</Button>
-              <Button ml={'3'} rightIcon={<ArrowForwardIcon />}>Next</Button>             
-          </Paper>          */}
+        <Box sx={{width: "52%",ml:'2em',display:'flex',justifyContent:'space-between',alignItems:'center',bgcolor:'transparent'}}>         
+              <Button variant="outlined"  startIcon={<ArrowLeftIcon />} sx={{bgcolor:'white'}} disabled={disablePrevBtn} onClick={handlePrevious}>Previous</Button>
+              <Button variant="outlined"  endIcon={<ArrowRightIcon />} sx={{bgcolor:'white'}} disabled={disableNextBtn} onClick={handleNext}>Next</Button>          
+        </Box>  
       </Box>
     </>
   )
