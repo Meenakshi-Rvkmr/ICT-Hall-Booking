@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Bookings = require("../models/Booking");
+const moment = require('moment')
 
 //CREATE Booking
 router.post("/",async(req,res)=>{
@@ -13,13 +14,23 @@ router.post("/",async(req,res)=>{
   catch (err) {
   res.status(500).json(err);
   }
-})
+})   
   
 //GET ALL Bookings
-router.get("/", async (req, res) => {  
+router.get("/", async (req, res) => { 
+
+  console.log(`req.params.selecteddate`,req.query.date) 
+  let qdate = req.query.date;
+  let bookings;
   try {
-    let bookings = await Bookings.find();
+    if(qdate){
+      bookings = await Bookings.find({"date":qdate});
+    }
+    else{
+      bookings = await Bookings.find()
+    }
     res.status(200).json(bookings);
+    
   } catch (err) {
     res.status(500).json(err);
   }

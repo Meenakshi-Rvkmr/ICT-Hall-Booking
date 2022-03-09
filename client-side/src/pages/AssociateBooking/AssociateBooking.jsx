@@ -27,18 +27,18 @@ const AssociateBooking=()=> {
       try {
         const response =await axios.get("/halls");
         setallHalls(response.data);
-        console.log(response.data);
+       // console.log(response.data);
           } catch (err) {
       }
     }
     fetchHalls();
   }, []);
 
-  console.log(`halls- `,allHalls);
+  //console.log(`halls- `,allHalls);
 
    const handleTitle = (event) =>{
        setTitle(event.target.value);
-       console.log(title)     
+       //console.log(title)     
    }
 
   const handleChange = (event) => {    
@@ -57,16 +57,27 @@ const AssociateBooking=()=> {
     setmaxEndtime(new Date(0, 0, 0, parseInt(myArray2[0]), parseInt(myArray2[1])));
 
     setStarttime(minStarttime)
+    setEndtime(minStarttime)
   };
 
-  const PostData= async () => {
+  const PostData= async (event) => {
+    event.preventDefault();
     try {
+      let temp1 = moment(date).format('DD/MM/YYYY');
+      
       const response=await axios.post(`/bookings`, {
-        associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:date,starttime:starttime,endtime:endtime     
+        associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime     
       });
+     
     } catch (err) {}
   }
   
+  const DispalyBookings=async (selecteddate)=>{
+    let tempDate = moment(selecteddate).format('DD/MM/YYYY')
+
+    const response = await axios.get(`/bookings/?date=${tempDate}`);
+    console.log('15th date',response.data)
+  }
    
     return (
       <>
@@ -157,6 +168,7 @@ const AssociateBooking=()=> {
                           value={date} 
                           onChange={(date) => {
                             setDate(date);
+                            DispalyBookings(date)
                           }}
                           renderInput={(params) => <TextField {...params} />}
                         />
@@ -194,13 +206,8 @@ const AssociateBooking=()=> {
           onChange={(endtime) => {
             setEndtime(endtime);
           }}
-          shouldDisableTime={(timeValue, clockType) => {
-            if (clockType === 'hours' && timeValue % 2) {
-              return true;
-            }
-
-            return false;
-          }}
+        minTime={minStarttime}
+        maxTime={maxEndtime}
         />
         </Grid>
      

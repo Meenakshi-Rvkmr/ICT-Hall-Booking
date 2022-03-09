@@ -15,6 +15,7 @@ const userRoutes = require("./routes/users.route");
 const MONGO_URL =
   "mongodb+srv://meenakshi:qazWSX123@cluster0.llhoa.mongodb.net/ICTHallBooking?retryWrites=true&w=majority";
 
+//const MONGO_URL = "mongodb+srv://roshin:Mongo*123*@cluster0.d1vlg.mongodb.net/Schedules?retryWrites=true&w=majority"
 app.use(express.json());
 app.use(cors());
 
