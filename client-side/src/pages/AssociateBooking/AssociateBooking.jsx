@@ -9,6 +9,8 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import TimePicker from '@mui/lab/TimePicker';
 import axios from 'axios';
 import moment from 'moment';
+import DisplayTimings from '../../components/displayTimings/DisplayTimings';
+
 const userValue = localStorage.getItem("user") === "undefined" ? null : JSON.parse(localStorage.getItem("user"))
 
 const AssociateBooking=()=> {
@@ -21,6 +23,7 @@ const AssociateBooking=()=> {
   const [allHalls,setallHalls] = useState([]) 
   const [minStarttime,setminStarttime] = useState(new Date());
   const [maxEndtime,setmaxEndtime] = useState(new Date());
+  const [times,setTimes] = useState([])
 
     useEffect(() => {
     const fetchHalls = async () => {
@@ -76,7 +79,14 @@ const AssociateBooking=()=> {
     let tempDate = moment(selecteddate).format('DD/MM/YYYY')
 
     const response = await axios.get(`/bookings/?date=${tempDate}`);
-    console.log('15th date',response.data)
+    //console.log('15th date',response.data)
+    let i,arr=[];
+
+    for(i = 0;i<response.data.length;i++){
+     arr.push({"starttime":response.data[i].starttime,"endtime":response.data[i].endtime})
+    }   
+    setTimes(arr);
+    console.log(times);  
   }
    
     return (
