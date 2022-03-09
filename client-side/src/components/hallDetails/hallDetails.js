@@ -1,21 +1,21 @@
-import React from 'react';
-import Grid from '@mui/material/Grid';
-import Associatedetails from '../associateDetails/Associatedetails';
-import Halls from '../Halls';
+import React from "react";
+import Halls from "../Halls";
+import { Stack, Typography } from "@mui/material";
 
-const halldetails = () => {
-
+const halldetails = ({ allHalls }) => {
   return (
-    <>       
-        <Grid container spacing={2}>
-          <Grid item xs={6} sm={6}>
-            <Halls />
-          </Grid>
-          <Grid item xs={6} sm={6}>
-            <Associatedetails />
-          </Grid>
-        </Grid>
-     
+    <>
+      <div style={{ backgroundColor: "" }}>       
+        <Typography component="div" variant="h5" fontWeight='bold' sx={{paddingLeft:"10px"}}> 
+        Hall Details
+        </Typography>
+        <br></br>
+        <Stack direction="row" spacing={2}>
+          {allHalls.map((hall, key)=>(
+            <Halls hall={hall} key={key}/>
+          ))}
+          </Stack>
+      </div>
     </>
   );
 };

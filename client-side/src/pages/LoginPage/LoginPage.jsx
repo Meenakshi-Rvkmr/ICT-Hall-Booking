@@ -70,7 +70,8 @@ const LoginPage = () => {
         }
     }, [formErrors]);
     return (
-        <Grid>
+        <div >
+ <Grid>
             <Paper elevation={10} style={paperStyle}>
                 <Grid align="center">
                     <Avatar style={avatarStyle}>
@@ -104,6 +105,8 @@ const LoginPage = () => {
                
             </Paper>
         </Grid>
+        </div>
+       
     );
 };
 export default LoginPage;
