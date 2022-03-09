@@ -23,7 +23,7 @@ const AssociateBooking=()=> {
   const [allHalls,setallHalls] = useState([]) 
   const [minStarttime,setminStarttime] = useState(new Date());
   const [maxEndtime,setmaxEndtime] = useState(new Date());
-  const [times,setTimes] = useState([])
+  const [times,setTimes] = useState([]) //for storing start and endtimes
 
     useEffect(() => {
     const fetchHalls = async () => {
@@ -63,6 +63,7 @@ const AssociateBooking=()=> {
     setEndtime(minStarttime)
   };
 
+  //on submitting the form, this happens
   const PostData= async (event) => {
     event.preventDefault();
     try {
@@ -74,16 +75,22 @@ const AssociateBooking=()=> {
      
     } catch (err) {}
   }
-  
+
+  //for displaying timings on side
   const DispalyBookings=async (selecteddate)=>{
     let tempDate = moment(selecteddate).format('DD/MM/YYYY')
 
     const response = await axios.get(`/bookings/?date=${tempDate}`);
-    //console.log('15th date',response.data)
-    let i,arr=[];
+    console.log(`date`,response.data)
+
+    let i,arr=[],s_time,e_time;
 
     for(i = 0;i<response.data.length;i++){
-     arr.push({"starttime":response.data[i].starttime,"endtime":response.data[i].endtime})
+
+      s_time = moment(response.data[i].starttime).format('hh:mm a')
+      e_time = moment(response.data[i].endtime).format('hh:mm a')
+
+     arr.push({"starttime":s_time,"endtime":e_time})
     }   
     setTimes(arr);
     console.log(times);  
@@ -184,6 +191,11 @@ const AssociateBooking=()=> {
                         />
                       </LocalizationProvider>
                     </Grid>
+                    
+                    <Grid xs={12} sm={6} item>
+                      <DisplayTimings times={times}/>
+                    </Grid>
+
                   </Grid>
 
                   <Grid
