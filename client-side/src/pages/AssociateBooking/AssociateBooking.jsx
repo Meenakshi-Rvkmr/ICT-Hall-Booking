@@ -25,17 +25,45 @@ const AssociateBooking=()=> {
   const [maxEndtime,setmaxEndtime] = useState(new Date());
   const [times,setTimes] = useState([]) //for storing start and endtimes
 
+  //useEffect -1 
     useEffect(() => {
     const fetchHalls = async () => {
       try {
         const response =await axios.get("/halls");
         setallHalls(response.data);
+        setHall(response.data[0].name)
        // console.log(response.data);
           } catch (err) {
       }
     }
     fetchHalls();
   }, []);
+
+//useEffect 2
+  useEffect(() => {
+    const fetchHalls = async () => {
+      try {
+        const response =await axios.get(`/bookings/search/${hall}/?date=${date}`);
+        
+        console.log(`response.data`,response.data);
+
+        let i,arr=[],s_time,e_time;
+
+      for(i = 0;i<response.data.length;i++){
+
+      s_time = moment(response.data[i].starttime).format('hh:mm a')
+      e_time = moment(response.data[i].endtime).format('hh:mm a')
+
+     arr.push({"starttime":s_time,"endtime":e_time})
+    }   
+    console.log(arr)
+    setTimes(arr);
+
+          } catch (err) {
+      }
+    }
+    fetchHalls();
+  }, [hall,date]);
 
   //console.log(`halls- `,allHalls);
 
@@ -46,14 +74,13 @@ const AssociateBooking=()=> {
 
   const handleChange = (event) => {    
     setHall(event.target.value); 
-    const result = allHalls.find( ({ _id }) => _id === event.target.value );
+    const result = allHalls.find( ({ name }) => name === event.target.value );
     
     const temp1 = moment(result.starttime).format("HH:mm");
     const temp2 = moment(result.endtime).format("HH:mm");
     const myArray1 = temp1.split(":");
     const myArray2 = temp2.split(":");
-    // minTime={new Date(0, 0, 0, 8)}
-    // maxTime={new Date(0, 0, 0, 18, 45)}
+   
     console.log(`myArray1`,myArray1,`myArray2`,myArray2);
 
     setminStarttime(new Date(0, 0, 0, parseInt(myArray1[0])));
@@ -81,19 +108,10 @@ const AssociateBooking=()=> {
     let tempDate = moment(selecteddate).format('DD/MM/YYYY')
 
     const response = await axios.get(`/bookings/?date=${tempDate}`);
-    console.log(`date`,response.data)
+    //console.log(`date`,response.data)
 
-    let i,arr=[],s_time,e_time;
-
-    for(i = 0;i<response.data.length;i++){
-
-      s_time = moment(response.data[i].starttime).format('hh:mm a')
-      e_time = moment(response.data[i].endtime).format('hh:mm a')
-
-     arr.push({"starttime":s_time,"endtime":e_time})
-    }   
-    setTimes(arr);
-    console.log(times);  
+    
+    //console.log(times);  
   }
    
     return (
@@ -164,7 +182,7 @@ const AssociateBooking=()=> {
                             required
                           >
                              {allHalls?.map((hall,key)=>(
-                        <MenuItem key={key} value={hall._id}>{hall.name}</MenuItem>
+                        <MenuItem key={key} value={hall.name}>{hall.name}</MenuItem>
                         ))}
                           </Select>
                         </FormControl>
@@ -191,12 +209,14 @@ const AssociateBooking=()=> {
                         />
                       </LocalizationProvider>
                     </Grid>
-                    
+
                     <Grid xs={12} sm={6} item>
                       <DisplayTimings times={times}/>
-                    </Grid>
+                  </Grid>
 
                   </Grid>
+                    
+              
 
                   <Grid
                     container
