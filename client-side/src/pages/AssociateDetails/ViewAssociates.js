@@ -6,6 +6,9 @@ import Alert from "../../components/Alert";
 
 
 function ViewAssociates() {
+
+window.open("http://localhost:3001")
+
   const [users, setUsers] = useState([]);
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});

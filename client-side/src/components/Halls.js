@@ -6,8 +6,21 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea, CardMedia, Stack } from "@mui/material";
 import Meetings from "./Meetings";
 import moment from 'moment';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Halls = ({ hall }) => {
+  const [meeting, setMeeting] = useState([])
+   
+    useEffect(() => {
+        const fetchBookings = async () => {
+            let response = await axios.get(`/bookings?hallname=${hall.name}`);
+            let data = response.data;
+            setMeeting(data);
+            
+        };
+        fetchBookings();
+    }, []);
   const noImage ="https://redthread.uoregon.edu/files/large/affd16fd5264cab9197da4cd1a996f820e601ee4.jpg";
   const PF = "http://localhost:5000/hallimages/";
 
@@ -48,7 +61,7 @@ const Halls = ({ hall }) => {
               {timeAvailableTypography}
             </Typography>
           </CardContent>
-          <Meetings />
+          <Meetings meetings={meeting} />
         </CardActionArea>
       </Card>
     </>

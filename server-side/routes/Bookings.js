@@ -21,10 +21,17 @@ router.get("/", async (req, res) => {
 
   //console.log(`req.params.selecteddate`,req.query.date) 
   let qdate = req.query.date;
+  let username = req.query.username;
+  let hallname = req.query.hallname;
+  console.log(req)
   let bookings;
   try {
     if(qdate){
       bookings = await Bookings.find({"date":qdate});
+    }else if(username){
+      bookings = await Bookings.find({"associateName":username});
+    }else if(hallname){
+      bookings = await Bookings.find({"hall":hallname});
     }
     else{
       bookings = await Bookings.find()

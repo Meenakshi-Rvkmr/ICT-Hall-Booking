@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState } from 'react';
+import * as React from 'react'
 import Paper from '@mui/material/Paper';
 import { Grid, Typography } from "@mui/material";
 //import DateRangeTwoToneIcon from '@mui/icons-material/DateRangeTwoTone';
@@ -21,38 +20,31 @@ import { styled } from '@mui/material/styles';
 import classNames from 'clsx';
 import AdminSideBar from '../components/adminSideBar/AdminSideBar';
 import NavBar from '../components/NavBar';
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
 const AdminCalenderViewPage = () => {
-
-  const appointmentData = [
-    {
-      title: 'Website Re-Design Plan',
-      startDate: new Date(2022, 2, 23, 9, 30),
-      endDate: new Date(2022, 2, 23, 11, 30),
-      location: "Room 1"
-    }, {
-      title: 'Book Flights to San Fran for Sales Trip',
-      startDate: new Date(2022, 2, 13, 12, 0),
-      endDate: new Date(2022, 2, 13, 13, 0),
-      location: "Room 2"
-    }, {
-      title: 'Conference Meeting',
-      startDate: new Date(2022, 2, 15, 12, 0),
-      endDate: new Date(2022, 2, 15, 13, 0),
-      location: "Room 1"
-    }, {
-      title: 'Final Budget Review',
-      startDate: new Date(2022, 2, 26, 12, 0),
-      endDate: new Date(2022, 2, 26, 13, 35),
-      id: 4,
-      location: 'Room 2',
-    }, {
-      title: 'New Brochures',
-      startDate: new Date(2022, 2, 26, 14, 30),
-      endDate: new Date(2022, 2, 26, 15, 45),
-      id: 5,
-      location: 'Room 2',
-    }]
+  const [appointmentData, setAppointmentData] = useState([]);
+  useEffect(() => {
+    const fetchBookings = async () => {
+        let response = await axios.get("/bookings");
+        let data = response.data.map((booking) => {
+            // let date = new Date(booking.BookingDate);
+            // let startTime = parseInt(booking.DurationFrom[0]);
+            // let endTime = parseInt(booking.DurationTo[0] + booking.DurationTo[1]);
+            return {
+                startDate: new Date(booking.starttime),
+                endDate: new Date(booking.endtime),
+                title: booking.title,
+                hall: booking.hall,
+            };
+        });
+        setAppointmentData(data);        
+    };
+    fetchBookings();
+}, []);
+  
     const PREFIX = 'Demo';
     const classes = {
       icon: `${PREFIX}-icon`,
@@ -130,10 +122,10 @@ const AdminCalenderViewPage = () => {
       },
     }));
     
-    const getClassByLocation = (classes, location) => {
-      if (location === 'Room 1') return classes.firstRoom;
-      if (location === 'Room 2') return classes.secondRoom;
-      if (location === 'Room 2') return classes.secondRoom;
+    const getClassByhall = (classes, hall) => {
+      if (hall === 'Meeting Room 1') return classes.firstRoom;
+      if (hall === 'Conference Hall 1') return classes.secondRoom;
+      if (hall === 'Room 2') return classes.secondRoom;
       return classes.thirdRoom;
     };
 
@@ -143,7 +135,7 @@ const AdminCalenderViewPage = () => {
     }) => (
       <StyledAppointmentTooltipHeader
         {...restProps}
-        className={classNames(getClassByLocation(classes, appointmentData.location), classes.header)}
+        className={classNames(getClassByhall(classes, appointmentData.hall), classes.header)}
         appointmentData={appointmentData}    />    
     ));
     
@@ -156,7 +148,7 @@ const AdminCalenderViewPage = () => {
             <StyledRoom className={classes.icon} />
           </StyledGrid>
           <Grid item xs={10}>
-            <span>{appointmentData.location}</span>
+            <span>{appointmentData.hall}</span>
           </Grid>
         </Grid>
       </AppointmentTooltip.Content>
@@ -171,13 +163,13 @@ const AdminCalenderViewPage = () => {
     const Appointment = (({ children, data, ...restProps }) => (
       <StyledAppointmentsAppointment
         {...restProps}
-        className={classNames(getClassByLocation(classes, data.location), classes.header)}
+        className={classNames(getClassByhall(classes, data.hall), classes.header)}
       />
     ));
     // const AppointmentContent = (({children, data, ...restProps }) => (
     //   <StyledAppointmentsAppointmentContent {...restProps} className={classes.apptContent} />
     // ));
-  const [data, setData] = useState(appointmentData);
+  
   const today = new Date();
   //const monthNames = [ "January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"];
 
@@ -192,7 +184,7 @@ const AdminCalenderViewPage = () => {
         <NavBar />
         <br></br>
         <Paper sx={{ boxShadow: 3, margin: "10px", marginTop: "0px", }}>
-          <Scheduler data={data} views={["workWeek"]} >
+          <Scheduler data={appointmentData} views={["workWeek"]} >
             <ViewState
               defaultCurrentDate={today}
             />                    

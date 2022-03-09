@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { Grid, Typography } from "@mui/material";
 //import DateRangeTwoToneIcon from '@mui/icons-material/DateRangeTwoTone';
@@ -20,41 +19,35 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Room from '@mui/icons-material/Room';
 import { styled } from '@mui/material/styles';
 import classNames from 'clsx';
-
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 import AssociateSideBar from '../components/associateSideBar/AssociateSideBar';
 import AssociateTopBar from '../components/associateTopBar/AssociateTopBar';
 
+const userValue = localStorage.getItem("user") === "undefined" ? null : JSON.parse(localStorage.getItem("user"))
 const CalenderViewPage = () => {
 
-  const appointmentData = [
-    {
-      title: 'Website Re-Design Plan',
-      startDate: new Date(2022, 2, 23, 9, 30),
-      endDate: new Date(2022, 2, 23, 11, 30),
-      location: "Room 1"
-    }, {
-      title: 'Book Flights to San Fran for Sales Trip',
-      startDate: new Date(2022, 2, 13, 12, 0),
-      endDate: new Date(2022, 2, 13, 13, 0),
-      location: "Room 2"
-    }, {
-      title: 'Conference Meeting',
-      startDate: new Date(2022, 2, 15, 12, 0),
-      endDate: new Date(2022, 2, 15, 13, 0),
-      location: "Room 1"
-    }, {
-      title: 'Final Budget Review',
-      startDate: new Date(2022, 2, 26, 12, 0),
-      endDate: new Date(2022, 2, 26, 13, 35),
-      id: 4,
-      location: 'Room 2',
-    }, {
-      title: 'New Brochures',
-      startDate: new Date(2022, 2, 26, 14, 30),
-      endDate: new Date(2022, 2, 26, 15, 45),
-      id: 5,
-      location: 'Room 2',
-    }]
+  const [appointmentData, setAppointmentData] = useState([]);
+  useEffect(() => {
+    const fetchBookings = async () => {
+        let response = await axios.get(`/bookings?/username=${userValue.username}`);
+        let data = response.data.map((booking) => {
+            // let date = new Date(booking.BookingDate);
+            // let startTime = parseInt(booking.DurationFrom[0]);
+            // let endTime = parseInt(booking.DurationTo[0] + booking.DurationTo[1]);
+            return {
+                startDate: new Date(booking.starttime),
+                endDate: new Date(booking.endtime),
+                title: booking.title,
+                hall: booking.hall,
+            };
+        });
+        setAppointmentData(data);        
+    };
+    fetchBookings();
+}, []);
+  
     const PREFIX = 'Demo';
     const classes = {
       icon: `${PREFIX}-icon`,
@@ -179,7 +172,7 @@ const CalenderViewPage = () => {
     // const AppointmentContent = (({children, data, ...restProps }) => (
     //   <StyledAppointmentsAppointmentContent {...restProps} className={classes.apptContent} />
     // ));
-  const [data, setData] = useState(appointmentData);
+  
   const today = new Date();
   //const monthNames = [ "January", "February", "March", "April", "May", "June", "July","August","September","October","November","December"];
 
@@ -194,7 +187,7 @@ const CalenderViewPage = () => {
         <AssociateTopBar />
         <br></br>
         <Paper sx={{ boxShadow: 3, margin: "10px", marginTop: "0px", }}>
-          <Scheduler data={data} views={["workWeek"]} >
+          <Scheduler data={appointmentData} views={["workWeek"]} >
             <ViewState
               defaultCurrentDate={today}
             />                    

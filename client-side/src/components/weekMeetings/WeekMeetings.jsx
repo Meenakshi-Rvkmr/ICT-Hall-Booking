@@ -11,28 +11,28 @@ import DateRangeTwoToneIcon from "@mui/icons-material/DateRangeTwoTone";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
-
+const userValue = localStorage.getItem("user") === "undefined" ? null : JSON.parse(localStorage.getItem("user"))
 let WeekMeetings = () => {
     const [schedulerData, setSechedulerData] = useState([]);
     const [meeting, setMeeting] = useState({})
-
+    const username = userValue.username;
     useEffect(() => {
         const fetchBookings = async () => {
-            let response = await axios.get("/bookings");
+            let response = await axios.get(`/bookings?/username=${username}`);
             let data = response.data.map((booking) => {
                 // let date = new Date(booking.BookingDate);
                 // let startTime = parseInt(booking.DurationFrom[0]);
                 // let endTime = parseInt(booking.DurationTo[0] + booking.DurationTo[1]);
                 return {
-                    startDate: new Date(booking.startDate),
-                    endDate: new Date(booking.endDate),
-                    title: booking.Title,
-                    HallName: booking.HallName,
+                    startDate: new Date(booking.starttime),
+                    endDate: new Date(booking.endtime),
+                    title: booking.title,
+                    HallName: booking.hall,
                 };
             });
             setSechedulerData(data);
             let todaymeeting = data.find((item) => {
-                let date = new Date(item.startDate)
+                let date = new Date(item.starttime)
                 if (date.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0))
                     return item;
             });

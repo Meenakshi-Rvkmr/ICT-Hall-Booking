@@ -5,7 +5,7 @@ import { Stack, Typography } from "@mui/material";
 const halldetails = ({ allHalls }) => {
   return (
     <>
-      <div style={{ backgroundColor: "" }}>       
+      <div style={{ backgroundColor: "", padding:"10px", marginLeft:"10px"}}>       
         <Typography component="div" variant="h5" fontWeight='bold' sx={{paddingLeft:"10px"}}> 
         Hall Details
         </Typography>

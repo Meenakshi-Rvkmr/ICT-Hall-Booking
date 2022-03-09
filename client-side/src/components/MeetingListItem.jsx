@@ -2,7 +2,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import VideocamRoundedIcon from '@mui/icons-material/VideocamRounded';
-import { Avatar, Card, ListItemText, Typography } from '@mui/material';
+import { Avatar, Box, Card, ListItemText, Typography } from '@mui/material';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 
 import { DataGrid } from '@mui/x-data-grid';
@@ -60,6 +60,20 @@ const MeetingListItem = () => {
           }]
     return (
         <>
+ <Box
+      sx={{
+        height: 300,
+        width: 1,
+        '& .super-app-theme--header': {
+          backgroundColor: 'rgba(255, 7, 0, 0.55)',
+        },
+      }}
+    >
+      <DataGrid rows={rows} columns={columns} pageSize={5}
+        rowsPerPageOptions={[5]}/>
+    </Box>
+
+
             <DataGrid
         rows={rows}
         columns={columns}
