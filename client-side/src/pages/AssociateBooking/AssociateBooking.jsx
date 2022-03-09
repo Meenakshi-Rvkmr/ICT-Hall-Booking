@@ -10,6 +10,7 @@ import TimePicker from '@mui/lab/TimePicker';
 import axios from 'axios';
 import moment from 'moment';
 import DisplayTimings from '../../components/displayTimings/DisplayTimings';
+import validate from './TimeValidation';
 
 const userValue = localStorage.getItem("user") === "undefined" ? null : JSON.parse(localStorage.getItem("user"))
 
@@ -65,11 +66,16 @@ const AssociateBooking=()=> {
     fetchHalls();
   }, [hall,date]);
 
-  //console.log(`halls- `,allHalls);
+
+  //useEffect - 3
+  // useEffect(() => {
+  //  let toolTip = validate(starttime,"starttime",times)
+  // }, [starttime]);
+  
 
    const handleTitle = (event) =>{
        setTitle(event.target.value);
-       //console.log(title)     
+           
    }
 
   const handleChange = (event) => {    
@@ -103,16 +109,7 @@ const AssociateBooking=()=> {
     } catch (err) {}
   }
 
-  //for displaying timings on side
-  const DispalyBookings=async (selecteddate)=>{
-    let tempDate = moment(selecteddate).format('DD/MM/YYYY')
-
-    const response = await axios.get(`/bookings/?date=${tempDate}`);
-    //console.log(`date`,response.data)
-
-    
-    //console.log(times);  
-  }
+  
    
     return (
       <>
@@ -203,7 +200,7 @@ const AssociateBooking=()=> {
                           value={date} 
                           onChange={(date) => {
                             setDate(date);
-                            DispalyBookings(date)
+                            
                           }}
                           renderInput={(params) => <TextField {...params} />}
                         />
@@ -234,6 +231,7 @@ const AssociateBooking=()=> {
           label="Start time" name="starttime" 
           onChange={(starttime) => {
             setStarttime(starttime);
+            validate(starttime,"starttime",times)
             console.log(starttime);
           }}
           minTime={minStarttime}
