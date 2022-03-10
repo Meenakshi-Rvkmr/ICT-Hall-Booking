@@ -74,7 +74,7 @@ hallsRouter.get("/:offsetValue/page", async (req, res) => {
     let halls;
     if (halltypeValue) {
       halls = await Halls.aggregate([
-        {$match: { "halltype": halltypeValue}},
+        {$match: { halltype: halltypeValue}},
         {$sort:{"createdAt":-1}},
         {$skip:tempValue},
         {$limit:3}
