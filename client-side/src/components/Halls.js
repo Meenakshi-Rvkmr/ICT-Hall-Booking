@@ -43,7 +43,7 @@ const Halls = ({ hall }) => {
   }
   return (
     <>
-      <Card>
+      <Card sx={{ boxShadow: 3 }}>
         <CardActionArea>
           <CardMedia
             component="img"

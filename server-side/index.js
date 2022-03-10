@@ -11,6 +11,7 @@ const loginRoute = require("./routes/Login");
 const hallsRouter = require("./routes/HallRouter");
 const halltypesRouter = require("./routes/HallTypeRouter");
 const userRoutes = require("./routes/users.route");
+const AssociateRoute = require('./routes/Associate.route')
 
 const MONGO_URL =
   "mongodb+srv://meenakshi:qazWSX123@cluster0.llhoa.mongodb.net/ICTHallBooking?retryWrites=true&w=majority";
@@ -65,6 +66,7 @@ app.use("/api/user", loginRoute);
 app.use("/api/halls", hallsRouter);
 app.use("/api/halltypes", halltypesRouter);
 app.use("/api/users", userRoutes);
+app.use('/api/Associates', AssociateRoute)
 
 app.listen(process.env.PORT || 5000, () => {
   console.log("Backend is running");
