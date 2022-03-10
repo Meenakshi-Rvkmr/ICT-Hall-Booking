@@ -11,8 +11,6 @@ const AddHall = () => {
 
   function operationCompletion(statusOperation) {
 
-    setstatusOperation(statusOperation);
-
     if(statusOperation==='success'){
         alert("Hall is Successfully Created") ; 
         handleClose();

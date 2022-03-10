@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Box, Grid, Button, } from '@mui/material';
 import HallSidebar from '../../components/hallSideBar/HallSidebar';
 import HallList from '../../components/hall_list/HallList';
@@ -15,33 +16,38 @@ const HallPage = () => {
   let [totalDocs,settotalDocs]=useState(0);
   let [disablePrevBtn,setdisablePrevBtn]=useState(true);
   let [disableNextBtn,setdisableNextBtn]=useState(false);
+  
+//Search property in path to know the username if any
+const {search}=useLocation();
 
     //Get the total count of documents
     useEffect(() => {
       const getTotalHalls = async () => {
+        setdisablePrevBtn(true)
+        setdisableNextBtn(false)
+        setoffsetValue(0);
         try {
-           const response =await axios.get("/halls/counthall/all");
+           const response =await axios.get("/halls/counthall/all"+search);
              settotalDocs(response.data);
-
              if (response.data <= 3){setdisableNextBtn(true);}      
              } catch (err) {
                console.log(err);
          }
       }
       getTotalHalls();    
-    }, []);
+    }, [search]);
 
   //Fetch the halls from the db
   useEffect(() => {
     const fetchHalls = async () => {
       try {
-        const response =await axios.get(`/halls/${offsetValue}/page`);
+        const response =await axios.get(`/halls/${offsetValue}/page`+search);
         setallHalls(response.data);
           } catch (err) {
       }
     }
     fetchHalls();
-  }, [offsetValue]);
+  }, [offsetValue,search]);
 
   //Previous and Next Button related functions
   const handlePrevious = () =>{

@@ -27,22 +27,14 @@ let sendRequestValues={};
 
 var now = new Date();
 var dateString = moment(now).format('YYYY-MM-DD');
-var starttimeString = "";
-var endtimeString = "";
-var assignValues = {};
+var timeString=moment(now).format('HH:mm'); 
 var hallimgFilename="";
 const addImageSource="https://cdn.pixabay.com/photo/2017/11/10/05/24/add-2935429_960_720.png";
 
 const CreateHallForm = (props) => {
 
 //=========================Time Variables and associated functions================================
-  if(props.ID===""){
-    starttimeString=moment(now).format('HH:mm');
-    endtimeString=moment(now).format('HH:mm');
-    assignValues={name:'',address:'',halltype:'',capacity:0}
-  }
-
-  const [timeValues, settimeValues] = useState({starttime:starttimeString ,endtime:endtimeString});
+ const [timeValues, settimeValues] = useState({starttime:timeString ,endtime:timeString});
 
   const findAmPm=(timeString)=>{
     const chkTime=timeString.slice(0, 2);
@@ -69,8 +61,10 @@ const [hallTypes,setHallTypes] = useState([]);
 //-----Fetch Api for Hall Types--------
 useEffect(()=>{
     const fetchHallTypes= async () => {
+      const name="halltype"
       const response = await axios.get("/halltypes");
       setHallTypes(response.data); 
+      setinputValues({ ...inputValues, [name]: response.data[0].name });           
     };
     fetchHallTypes();
   },[])
@@ -80,7 +74,7 @@ useEffect(()=>{
 
 //=================================Input Variables declartion and functions==================================================
 
-var [inputValues,setinputValues]=useState(assignValues);
+var [inputValues,setinputValues]=useState({name:'',address:'',halltype:'',capacity:0});
 var [imageSource,setimageSource]=useState(addImageSource);
 var [imageFile,setimageFile]=useState(null);
 
