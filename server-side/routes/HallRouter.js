@@ -1,6 +1,6 @@
 const express = require('express'); 
 const hallsRouter = express.Router();
-const Halls = require("../models/HallDB");
+const Halls = require("../model/HallDB");
 
 
 //CREATE Hall
@@ -57,39 +57,53 @@ hallsRouter.get("/:id", async (req, res) => {
 
 //GET ALL HALL
 hallsRouter.get("/", async (req, res) => {
-  try {
-    let halls  = await Halls.find();
-    res.status(200).json(halls);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+    try {
+      let halls  = await Halls.find();
+      res.status(200).json(halls);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
 
 //GET ALL HALL OFFESET
 hallsRouter.get("/:offsetValue/page", async (req, res) => {
-  const halltype = req.query.hall;
+  const halltypeValue = req.query.halltype;
   const tempValue=parseInt(req.params.offsetValue);
+  
   try {
     let halls;
-    if (halltype) {
-      halls = await Halls.find({ halltype }).sort({createdAt:-1}).limit(3);
+    if (halltypeValue) {
+      halls = await Halls.aggregate([
+        {$match: { "halltype": halltypeValue}},
+        {$sort:{"createdAt":-1}},
+        {$skip:tempValue},
+        {$limit:3}
+      ]);
     } else {
       halls= await Halls.aggregate([
         {$sort:{"createdAt":-1}},
         {$skip:tempValue},
         {$limit:3}
-      ])
+      ]);
     }
     res.status(200).json(halls);
   } catch (err) {
     res.status(500).json(err);
+    console.log(err);
   }
 });
 
 //GET TOTAL COUNT OF  HALL 
 hallsRouter.get("/counthall/all", async (req, res) => {
+  const halltypeValue = req.query.halltype;
+  
+  let no_of_halls;
   try {
-    let no_of_halls  = await Halls.countDocuments();
+    if (halltypeValue) {      
+     no_of_halls  = await Halls.countDocuments({ halltype: halltypeValue });
+    }else{
+     no_of_halls  = await Halls.countDocuments();
+    }
     res.status(200).json(no_of_halls);
   } catch (err) {
     res.status(500).json(err);    
@@ -97,5 +111,7 @@ hallsRouter.get("/counthall/all", async (req, res) => {
 });
 
 
+
 module.exports = hallsRouter;
+
 
