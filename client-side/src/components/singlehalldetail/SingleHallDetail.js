@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Typography, Card, CardContent, CardMedia, Grid, Toolbar, IconButton,  } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditHall from '../edithallform/EditHall';
 
 const SingleHallDetail = (props) => {
 
@@ -35,10 +36,11 @@ const SingleHallDetail = (props) => {
         try {
           await axios.delete(`/halls/${hall._id}`);
 
-          try{
-            await axios.delete(`/hall/deleteimage/${hall.hallimg}`);
-          }catch(err){}
-
+          if (hall.hallimg){
+            try{
+              await axios.delete(`/hall/deleteimage/${hall.hallimg}`);
+            }catch(err){}
+          }
           window.location.replace("/halls");
         } catch (err) {}
       } 
@@ -47,12 +49,17 @@ const SingleHallDetail = (props) => {
   //================Hall Update Operation===========================
   const handleUpdate=()=>{
     setupdateMode(true);
-    console.log("update");
+  }
+
+  const updateStatus=(update)=>{
+    setupdateMode(update);
   }
 
 
   return (
     <Card sx={{ mt: "10px", boxShadow: 3 }}>
+      {updateMode && <EditHall hall={hall}  update={updateStatus}/>} 
+
       <CardContent >
         <Grid container item spacing={2}>
           <Grid item xs={4}>

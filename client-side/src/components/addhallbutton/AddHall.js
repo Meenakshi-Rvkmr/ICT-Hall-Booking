@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button,Dialog,DialogActions,DialogContent,Typography } from '@mui/material';
+import { Button,Dialog,DialogActions,DialogContent,Typography } from '@mui/material';
 //import addhall_theme from './AddHallTheme';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CreateHallForm from '../createhallform/CreateHallForm';
@@ -8,7 +8,6 @@ import CreateHallForm from '../createhallform/CreateHallForm';
 const AddHall = () => {
 
   const [open, setOpen] = useState(false);
-  const [statusOperation, setstatusOperation] = useState("");
 
   function operationCompletion(statusOperation) {
 
@@ -17,7 +16,6 @@ const AddHall = () => {
     if(statusOperation==='success'){
         alert("Hall is Successfully Created") ; 
         handleClose();
-        setstatusOperation("");
         window.location.replace("/halls");
     }else{
         alert("Something went wrong...Please Try Again"); 

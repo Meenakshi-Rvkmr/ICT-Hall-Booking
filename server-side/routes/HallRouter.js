@@ -16,24 +16,17 @@ hallsRouter.post("/", async (req, res) => {
 
 //UPDATE Hall Details
 hallsRouter.put("/:id", async (req, res) => {
-
-  const hall = await Halls.findById(req.params.id);
-    if(hall){
-      try {
-        const updateHall = await Halls.findByIdAndUpdate(
-          req.params.id,
-          {
-            $set: req.body,
-          },
-          { new: true }
-        );
-        res.status(200).json(updateHall);
-      } catch (err) {
-        res.status(500).json(err);
-      }
-    }else{
-
-    }res.status(401).json("Something went Wrong");
+  
+  try {
+    const updateHall = await Halls.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.status(200).json(updateHall);
+  } catch (err) {
+    res.status(500).json(err);
+  }
       
 });
 
