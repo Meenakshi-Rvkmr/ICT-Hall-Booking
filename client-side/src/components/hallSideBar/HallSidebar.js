@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { Paper, Typography, Container, Box, Button } from '@mui/material';
 import sidebar_theme from './SidebarTheme';
@@ -44,9 +45,15 @@ const HallSidebar = () => {
           <Typography sx={sidebar_theme("SubTitle1")}>Halls Available</Typography>
           <Box display="flex" width="100% ">
         {hallTypes.map((htype, key) => (           
-            <Button variant="contained" key={key} color="info" width="100%" sx={{margin:"10px",paddingX:"10px", borderRadius:"5%"}}>{htype.name}</Button>
-           
+            <Link key={key} to={`/?halltype=${htype.name}`}>
+            <Button variant="contained" key={key} color="info" width="100%" 
+             sx={{margin:"10px",paddingX:"10px", borderRadius:"5%"}}>{htype.name}</Button>
+            </Link>
           ))}
+          <Link to='/'>
+               <Button variant="contained" color="info" width="100%" 
+               sx={{margin:"10px",paddingX:"10px", borderRadius:"5%"}}>All</Button>
+          </Link>
         </Box>
         </Box>
         
