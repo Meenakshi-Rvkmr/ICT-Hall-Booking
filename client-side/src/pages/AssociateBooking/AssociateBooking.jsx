@@ -92,10 +92,8 @@ const AssociateBooking=()=> {
 
     time1=parseInt(myArray2[0]);
     time2=parseInt(myArray2[1]);
-    setmaxEndtime(new Date(0, 0, 0,time1,time2));
-    
+    setmaxEndtime(new Date(0, 0, 0,time1,time2));   
    }
-
 
   //on submitting the form, this happens
   const PostData= async (event) => {
@@ -113,8 +111,7 @@ const AssociateBooking=()=> {
       endtime.setMonth(tempArray[1]);
       endtime.setFullYear(tempArray[2]);
 
-      var obj = {title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime     
-          }  
+      var obj = {title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime}  
         setFormErrors(validation(obj))
       //validate();
     //   const response=await axios.post(`/bookings`, {
@@ -214,24 +211,20 @@ const AssociateBooking=()=> {
                           minDate={new Date()}
                           maxDate={addDays(new Date(), 20)} 
                           shouldDisableDate={isWeekend}
-                          value={date} error={formErrors.showdate}
-                          helperText={formErrors.date} sx={{marginTop:"10px"}}
+                          value={date} 
+                          //error={formErrors.showdate}
+                          sx={{marginTop:"10px"}}
                           onChange={(newValue) => {
                             setDate(newValue); 
                           }}
-                          renderInput={(params) => <TextField {...params} />}
+                          renderInput={(params) => <TextField {...params}  helperText={formErrors.date} />}
                         />
                       </LocalizationProvider>
                     </Grid>
-
                     <Grid item xs={12} sm={6}>
                       <DisplayTimings times={times}/>
                   </Grid>
-
                   </Grid>
-                    
-              
-
                   <Grid
                     container
                     spacing={1}
@@ -243,23 +236,23 @@ const AssociateBooking=()=> {
     
           <Grid item xs={12} sm={6} >
             <TimePicker
-          renderInput={(params) => <TextField {...params} />}
+          renderInput={(params) => <TextField {...params}/>}
           value={starttime}
-          label="Start time" name="starttime" error={formErrors.showstarttime}
-          helperText={formErrors.starttime}
+          label="Start time" name="starttime" required
+          //error={formErrors.showstarttime} 
           onChange={(starttime) => {
-            setStarttime(starttime);
-            
+            setStarttime(starttime); 
           }}
           minTime={minStarttime}
           maxTime={maxEndtime}
         />
+        <Typography>{formErrors.starttime}</Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
     <TimePicker 
-          renderInput={(params) => <TextField {...params} />}
-          label="End time" name="endtime" error={formErrors.showendtime}
-          helperText={formErrors.endtime}
+          renderInput={(params) => <TextField {...params}/>}
+          label="End time" name="endtime" required
+         // error={formErrors.showendtime}
           value={endtime} 
           onChange={(endtime) => {
             setEndtime(endtime);
@@ -267,6 +260,7 @@ const AssociateBooking=()=> {
         minTime={minStarttime}
         maxTime={maxEndtime}
         />
+        <Typography>{formErrors.endtime}</Typography>
         </Grid>
      
     </LocalizationProvider>
