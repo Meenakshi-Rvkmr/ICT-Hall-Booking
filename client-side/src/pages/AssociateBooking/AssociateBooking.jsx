@@ -114,11 +114,13 @@ const AssociateBooking=()=> {
 
       var obj = {title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime}  
       setFormErrors(validation(obj,times))
-      //validate();
-    //   const response=await axios.post(`/bookings`, {
-    //     associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:temp2,endtime:temp3     
-    //   });
-    //  setHall(response.data.hall);
+      
+      if(formErrors.status){
+      const response=await axios.post(`/bookings`, {
+        associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime     
+      });
+     setHall(response.data.hall);
+    }
     } catch (err) {}
   }
 

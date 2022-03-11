@@ -6,15 +6,17 @@ const validation=(inputValues,bookedTimings)=>{
     stime = moment(inputValues.starttime).format("hh:mm a") 
     etime = moment(inputValues.endtime).format("hh:mm a") 
     
-    let errors = {};
+    let errors = {"status":true};
    
     if (!inputValues.title) {
         errors.title = "Entry Required";
         errors.showtitle = true;
+        errors.status = false
     }
     
     if(inputValues.starttime >= inputValues.endtime){
         errors.starttime = "Invalid timing";
+        errors.status = false
     }
     
     else if(bookedTimings.length>0){
@@ -22,14 +24,16 @@ const validation=(inputValues,bookedTimings)=>{
         if(!validateTimings(stime)){
             errors.starttime = "Choose another time.....meeting is already booked";
             errors.showtime = true;
+            errors.status = false
         } 
         else if(!validateTimings(etime))  {
             errors.starttime = "Choose another time.....meeting is already booked";
             errors.showtime = true;
+            errors.status = false
         } 
     }
 
-    console.log(errors)
+    
     return errors;
 }
 
