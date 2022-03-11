@@ -15,7 +15,7 @@ router.post("/",async(req,res)=>{
   res.status(500).json(err);
   }
 })   
-     
+    
 //GET ALL Bookings
 router.get("/", async (req, res) => { 
 

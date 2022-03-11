@@ -34,13 +34,14 @@ let AssociateHomePage = () => {
                 </Grid>
                
                 <Grid item xs={10} style={{ backgroundColor: "#efecec" }}>
+                <div style={{ padding: "10px" }}>
+                        <AssociateDetails />
+                    </div>
                     <div style={{ padding: "10px", boxShadow:10 }} sx={{ boxShadow: 3 }}>
                     <HallDetails allHalls={allHalls} />
                     </div>
                     <br />
-                    <div style={{ padding: "10px" }}>
-                        <AssociateDetails />
-                    </div>
+                   
                    
                 </Grid>
             </Grid>
