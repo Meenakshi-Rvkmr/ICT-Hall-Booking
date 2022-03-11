@@ -105,11 +105,12 @@ const AssociateBooking=()=> {
       let tempArray= temp1.split("/");
       let temp2=starttime.setFullYear(tempArray[2], tempArray[1], tempArray[0]);
       let temp3=endtime.setFullYear(tempArray[2], tempArray[1], tempArray[0])
-      validate();
-      const response=await axios.post(`/bookings`, {
-        associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:temp2,endtime:temp3     
-      });
-     
+      console.log(tempArray);
+      //validate();
+    //   const response=await axios.post(`/bookings`, {
+    //     associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:temp2,endtime:temp3     
+    //   });
+    //  setHall(response.data.hall);
     } catch (err) {}
   }
 
