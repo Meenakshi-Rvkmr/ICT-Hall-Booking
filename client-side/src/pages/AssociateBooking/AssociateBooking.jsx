@@ -113,7 +113,7 @@ const AssociateBooking=()=> {
       endtime.setFullYear(tempArray[2]);
 
       var obj = {title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime}  
-        setFormErrors(validation(obj))
+      setFormErrors(validation(obj,times))
       //validate();
     //   const response=await axios.post(`/bookings`, {
     //     associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:temp2,endtime:temp3     
@@ -167,16 +167,20 @@ const AssociateBooking=()=> {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6}>                   
                       <TextField
                         label="Title" name="title" 
-                         placeholder="Title" value={title} onChange={handleTitle} error={formErrors.showtitle}
-                         
-                         required
+                         placeholder="Title" value={title} onChange={handleTitle} error={formErrors.showtitle}  
+                       
                         fullWidth
-                      />
-                     
+                      /> 
+                       
+                <Grid item >
+                  <Typography sx={{color:"red"}}>{formErrors.title}</Typography> 
+              </Grid> 
+                                       
                     </Grid>
+                   
 
                     <Grid item xs={12} sm={6}>
                       <Box sx={{ minWidth: 120 }}>
@@ -188,8 +192,7 @@ const AssociateBooking=()=> {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             name="hall" 
-                            label="Hall" value={hall} onChange={handleChange}  error={formErrors.showhall}
-                            //helperText={formErrors.hall}                          
+                            label="Hall" value={hall} onChange={handleChange}  error={formErrors.showhall}                         
                             required
                           >
                              {allHalls?.map((hall,key)=>(
@@ -198,8 +201,10 @@ const AssociateBooking=()=> {
                           </Select>
                         </FormControl>
                       </Box>
-                      <Typography sx={{fontSize:"15px",color:"red"}}>{formErrors.hall}</Typography>
                       
+                      {formErrors.starttime && <Grid item >
+                  <Typography sx={{color:"white"}}>{formErrors.title}</Typography>   
+              </Grid> }
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
@@ -214,7 +219,7 @@ const AssociateBooking=()=> {
                           maxDate={addDays(new Date(), 20)} 
                           shouldDisableDate={isWeekend}
                           value={date} 
-                          //error={formErrors.showdate}
+                         
                           sx={{marginTop:"10px"}}
                           onChange={(newValue) => {
                             setDate(newValue); 
@@ -227,34 +232,39 @@ const AssociateBooking=()=> {
                       <DisplayTimings times={times}/>
                   </Grid>
                   </Grid>
+
                   <Grid
                     container
                     spacing={1}
                     alignItems="center"
-                    justifyContent="center"  
+                    justifyContent="center" 
                   >
-
         <LocalizationProvider dateAdapter={AdapterDateFns}>
     
-          <Grid item xs={12} sm={6} >
-            <TimePicker
+          <Grid item xs={4}  >
+            <TimePicker 
           renderInput={(params) => <TextField {...params}/>}
           value={starttime}
           label="Start time" name="starttime" 
-          //error={formErrors.showstarttime} 
+          error={formErrors.showstarttime} 
           onChange={(starttime) => {
             setStarttime(starttime); 
           }}
           minTime={minStarttime}
-          maxTime={maxEndtime}
-        />
-        <Typography>{formErrors.starttime}</Typography>
+          maxTime={maxEndtime} 
+        />  
         </Grid>
-        <Grid item xs={12} sm={6}>
+
+        {formErrors.starttime &&
+        <Grid item xs={4} >
+        <Typography sx={{color:"red"}}>{formErrors.starttime}</Typography> 
+        </Grid>}
+       
+        <Grid item xs={4}>
     <TimePicker 
           renderInput={(params) => <TextField {...params}/>}
           label="End time" name="endtime" 
-         // error={formErrors.showendtime}
+         error={formErrors.showendtime}
           value={endtime} 
           onChange={(endtime) => {
             setEndtime(endtime);
@@ -262,12 +272,11 @@ const AssociateBooking=()=> {
         minTime={minStarttime}
         maxTime={maxEndtime}
         />
-        <Typography>{formErrors.endtime}</Typography>
+        {/* <Typography>{formErrors.endtime}</Typography> */}
         </Grid>
-     
-    </LocalizationProvider>
-                    
-                    <Grid item xs={12} style={{ marginTop: "20px" }}>
+     </LocalizationProvider>
+        </Grid>  
+        <br/>
                       <Button
                         type="submit"
                         color="primary"
@@ -276,8 +285,8 @@ const AssociateBooking=()=> {
                       >
                         Submit
                       </Button>
-                    </Grid>
-                  </Grid>
+                    
+                  
                 </form>
               </CardContent>
             </Card>
