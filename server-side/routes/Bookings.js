@@ -15,7 +15,7 @@ router.post("/",async(req,res)=>{
   res.status(500).json(err);
   }
 })   
-  
+     
 //GET ALL Bookings
 router.get("/", async (req, res) => { 
 
@@ -47,10 +47,9 @@ router.get("/", async (req, res) => {
 router.get("/search/:hallName",async(req,res)=>{
 
   let temp1 = req.params.hallName;
-  
-  let qdate = req.query.date;
-  qdate = moment(qdate).format("DD/MM/YYYY")
-  
+  console.log(`temp1`,temp1)
+  let qdate = req.query.mdate;
+  console.log(`qdate`,qdate)
   let bookings;
   try {
     if(qdate){

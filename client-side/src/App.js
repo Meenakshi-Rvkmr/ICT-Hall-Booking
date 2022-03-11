@@ -4,7 +4,7 @@ import { Context } from "./context/Context";
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
+  Route,   
   Link,
   BrowserRouter,
 } from "react-router-dom";

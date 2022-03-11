@@ -19,5 +19,5 @@ const DisplayTimings=({times})=>{
        </Box> 
     )
 }
-
+    
 export default DisplayTimings;

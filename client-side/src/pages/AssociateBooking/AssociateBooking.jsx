@@ -13,7 +13,7 @@ import DisplayTimings from '../../components/displayTimings/DisplayTimings';
 import validate from './TimeValidation';
 
 const userValue = localStorage.getItem("user") === "undefined" ? null : JSON.parse(localStorage.getItem("user"))
-
+    
 const AssociateBooking=()=> {
  
   const [title,setTitle] = useState('');
@@ -32,7 +32,7 @@ const AssociateBooking=()=> {
       try {
         const response =await axios.get("/halls");
         setallHalls(response.data);
-        setHall(response.data[0].name)
+        //setHall(response.data[0].name)
        // console.log(response.data);
           } catch (err) {
       }
@@ -44,10 +44,9 @@ const AssociateBooking=()=> {
   useEffect(() => {
     const fetchHalls = async () => {
       try {
-        const response =await axios.get(`/bookings/search/${hall}/?date=${date}`);
-        
+        let mdate = moment(date).format("DD/MM/YYYY")
+        const response =await axios.get(`/bookings/search/${hall}/?date=${mdate}`); 
         console.log(`response.data`,response.data);
-
         let i,arr=[],s_time,e_time;
 
       for(i = 0;i<response.data.length;i++){
@@ -57,10 +56,9 @@ const AssociateBooking=()=> {
 
      arr.push({"starttime":s_time,"endtime":e_time})
     }   
-    console.log(arr)
+    console.log(`arr`,arr)
     setTimes(arr);
-
-          } catch (err) {
+    } catch (err) {
       }
     }
     fetchHalls();
@@ -74,8 +72,7 @@ const AssociateBooking=()=> {
   
 
    const handleTitle = (event) =>{
-       setTitle(event.target.value);
-           
+       setTitle(event.target.value);        
    }
 
   const handleChange = (event) => {    
@@ -89,7 +86,7 @@ const AssociateBooking=()=> {
    
     console.log(`myArray1`,myArray1,`myArray2`,myArray2);
 
-    setminStarttime(new Date(0, 0, 0, parseInt(myArray1[0])));
+    setminStarttime(new Date(0, 0, 0, parseInt(myArray1[0]),parseInt(myArray1[1])));
     setmaxEndtime(new Date(0, 0, 0, parseInt(myArray2[0]), parseInt(myArray2[1])));
 
     setStarttime(minStarttime)
@@ -101,7 +98,7 @@ const AssociateBooking=()=> {
     event.preventDefault();
     try {
       let temp1 = moment(date).format('DD/MM/YYYY');
-      
+      validate();
       const response=await axios.post(`/bookings`, {
         associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime     
       });
@@ -109,7 +106,6 @@ const AssociateBooking=()=> {
     } catch (err) {}
   }
 
-  
    
     return (
       <>
@@ -231,8 +227,7 @@ const AssociateBooking=()=> {
           label="Start time" name="starttime" 
           onChange={(starttime) => {
             setStarttime(starttime);
-            validate(starttime,"starttime",times)
-            console.log(starttime);
+            
           }}
           minTime={minStarttime}
           maxTime={maxEndtime}

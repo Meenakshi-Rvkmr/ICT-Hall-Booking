@@ -5,7 +5,7 @@ const booking = new mongoose.Schema({
     associateName:{
         type:String,
         required:true
-    },
+    },   
     ICTAKID:{
         type:String,
         required:true

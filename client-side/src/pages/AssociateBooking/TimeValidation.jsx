@@ -9,5 +9,5 @@ const validate=({value,type,times})=>{
     }
     return errorMsg;
 }
-
+    
 export default validate;
