@@ -32,8 +32,8 @@ const AssociateBooking=()=> {
       try {
         const response =await axios.get("/halls");
         setallHalls(response.data);
-        //setHall(response.data[0].name)
-       // console.log(response.data);
+        setHall(response.data[0].name)
+        timeSettings(response.data[0]);        
           } catch (err) {
       }
     }
@@ -45,8 +45,8 @@ const AssociateBooking=()=> {
     const fetchHalls = async () => {
       try {
         let mdate = moment(date).format("DD/MM/YYYY")
-        const response =await axios.get(`/bookings/search/${hall}/?date=${mdate}`); 
-        console.log(`response.data`,response.data);
+        const response =await axios.get(`/bookings/search/${hall}/?mdate=${mdate}`); 
+        
         let i,arr=[],s_time,e_time;
 
       for(i = 0;i<response.data.length;i++){
@@ -56,7 +56,7 @@ const AssociateBooking=()=> {
 
      arr.push({"starttime":s_time,"endtime":e_time})
     }   
-    console.log(`arr`,arr)
+    
     setTimes(arr);
     } catch (err) {
       }
@@ -65,42 +65,49 @@ const AssociateBooking=()=> {
   }, [hall,date]);
 
 
-  //useEffect - 3
-  // useEffect(() => {
-  //  let toolTip = validate(starttime,"starttime",times)
-  // }, [starttime]);
-  
-
    const handleTitle = (event) =>{
        setTitle(event.target.value);        
    }
 
   const handleChange = (event) => {    
     setHall(event.target.value); 
-    const result = allHalls.find( ({ name }) => name === event.target.value );
+    let result = allHalls.find( ({ name }) => name === event.target.value );   
+    timeSettings(result);
+  };
+  //Setting the Time Pickers
+   const timeSettings=(elementObj)=>{
+   
+    const temp1 = moment(elementObj.starttime).format("HH:mm");
+    const temp2 = moment(elementObj.endtime).format("HH:mm");
     
-    const temp1 = moment(result.starttime).format("HH:mm");
-    const temp2 = moment(result.endtime).format("HH:mm");
     const myArray1 = temp1.split(":");
     const myArray2 = temp2.split(":");
-   
-    console.log(`myArray1`,myArray1,`myArray2`,myArray2);
+    let time1,time2;
+    time1=parseInt(myArray1[0]);
+    time2=parseInt(myArray1[1]);
+    setminStarttime(new Date(0, 0, 0,time1 ,time2));
 
-    setminStarttime(new Date(0, 0, 0, parseInt(myArray1[0]),parseInt(myArray1[1])));
-    setmaxEndtime(new Date(0, 0, 0, parseInt(myArray2[0]), parseInt(myArray2[1])));
+    setStarttime(new Date(0, 0, 0,time1 ,time2))
+    setEndtime(new Date(0, 0, 0,time1 ,time2))
 
-    setStarttime(minStarttime)
-    setEndtime(minStarttime)
-  };
+    time1=parseInt(myArray2[0]);
+    time2=parseInt(myArray2[1]);
+    setmaxEndtime(new Date(0, 0, 0,time1,time2));
+    
+   }
+
 
   //on submitting the form, this happens
   const PostData= async (event) => {
     event.preventDefault();
     try {
       let temp1 = moment(date).format('DD/MM/YYYY');
+      let tempArray= temp1.split("/");
+      let temp2=starttime.setFullYear(tempArray[2], tempArray[1], tempArray[0]);
+      let temp3=endtime.setFullYear(tempArray[2], tempArray[1], tempArray[0])
       validate();
       const response=await axios.post(`/bookings`, {
-        associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime     
+        associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:temp2,endtime:temp3     
       });
      
     } catch (err) {}
@@ -151,7 +158,7 @@ const AssociateBooking=()=> {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    <Grid xs={12} sm={6} item>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         label="Title" name="title" 
                          placeholder="Title" value={title} onChange={handleTitle}
@@ -161,7 +168,7 @@ const AssociateBooking=()=> {
                       
                     </Grid>
 
-                    <Grid xs={12} sm={6} item>
+                    <Grid item xs={12} sm={6}>
                       <Box sx={{ minWidth: 120 }}>
                         <FormControl fullWidth>
                           <InputLabel id="demo-simple-select-label">
@@ -182,7 +189,7 @@ const AssociateBooking=()=> {
                       </Box>
                     </Grid>
 
-                    <Grid xs={12} sm={6} item>
+                    <Grid item xs={12} sm={6}>
                       <LocalizationProvider
                         dateAdapter={AdapterDateFns}
                         required
@@ -194,16 +201,15 @@ const AssociateBooking=()=> {
                           maxDate={addDays(new Date(), 20)} 
                           shouldDisableDate={isWeekend}
                           value={date} 
-                          onChange={(date) => {
-                            setDate(date);
-                            
+                          onChange={(event) => {
+                            setDate(event.target.value); 
                           }}
                           renderInput={(params) => <TextField {...params} />}
                         />
                       </LocalizationProvider>
                     </Grid>
 
-                    <Grid xs={12} sm={6} item>
+                    <Grid item xs={12} sm={6}>
                       <DisplayTimings times={times}/>
                   </Grid>
 
@@ -220,7 +226,7 @@ const AssociateBooking=()=> {
 
         <LocalizationProvider dateAdapter={AdapterDateFns}>
     
-          <Grid xs={12} sm={6} item >
+          <Grid item xs={12} sm={6} >
             <TimePicker
           renderInput={(params) => <TextField {...params} />}
           value={starttime}
@@ -233,7 +239,7 @@ const AssociateBooking=()=> {
           maxTime={maxEndtime}
         />
         </Grid>
-        <Grid xs={12} sm={6} item>
+        <Grid item xs={12} sm={6}>
     <TimePicker 
           renderInput={(params) => <TextField {...params} />}
           label="End time" name="endtime"

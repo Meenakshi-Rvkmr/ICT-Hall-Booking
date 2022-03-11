@@ -45,11 +45,11 @@ router.get("/", async (req, res) => {
 
 
 router.get("/search/:hallName",async(req,res)=>{
-
+  
   let temp1 = req.params.hallName;
-  console.log(`temp1`,temp1)
   let qdate = req.query.mdate;
-  console.log(`qdate`,qdate)
+    console.log(`temp1`,temp1)  
+    console.log(`qdate`,qdate)
   let bookings;
   try {
     if(qdate){
