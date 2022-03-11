@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { AppBar,Avatar, Card, CardContent, Toolbar,Container,Grid,Paper, TextField, Typography,FormControl,Select,MenuItem,InputLabel,Box,Button } from '@mui/material';
+import { AppBar,Avatar, Card, CardContent, Toolbar,Container,Grid,Paper,Tooltip,TextField, Typography,FormControl,Select,MenuItem,InputLabel,Box,Button } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import addDays from 'date-fns/addDays';
@@ -26,6 +26,7 @@ const AssociateBooking=()=> {
   const [maxEndtime,setmaxEndtime] = useState(new Date());
   const [times,setTimes] = useState([]) //for storing start and endtimes
   const [formErrors, setFormErrors] = useState({});
+  
   //useEffect -1 
     useEffect(() => {
     const fetchHalls = async () => {
@@ -170,10 +171,11 @@ const AssociateBooking=()=> {
                       <TextField
                         label="Title" name="title" 
                          placeholder="Title" value={title} onChange={handleTitle} error={formErrors.showtitle}
-                         //helperText={formErrors.title}
+                         
+                         required
                         fullWidth
                       />
-                      <Typography sx={{fontSize:"15px",color:"red"}}>{formErrors.title}</Typography>   
+                     
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
@@ -238,7 +240,7 @@ const AssociateBooking=()=> {
             <TimePicker
           renderInput={(params) => <TextField {...params}/>}
           value={starttime}
-          label="Start time" name="starttime" required
+          label="Start time" name="starttime" 
           //error={formErrors.showstarttime} 
           onChange={(starttime) => {
             setStarttime(starttime); 
@@ -251,7 +253,7 @@ const AssociateBooking=()=> {
         <Grid item xs={12} sm={6}>
     <TimePicker 
           renderInput={(params) => <TextField {...params}/>}
-          label="End time" name="endtime" required
+          label="End time" name="endtime" 
          // error={formErrors.showendtime}
           value={endtime} 
           onChange={(endtime) => {
@@ -265,7 +267,7 @@ const AssociateBooking=()=> {
      
     </LocalizationProvider>
                     
-                    <Grid xs={12} style={{ marginTop: "20px" }}>
+                    <Grid item xs={12} style={{ marginTop: "20px" }}>
                       <Button
                         type="submit"
                         color="primary"
