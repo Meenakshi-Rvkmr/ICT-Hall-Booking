@@ -10,7 +10,7 @@ import TimePicker from '@mui/lab/TimePicker';
 import axios from 'axios';
 import moment from 'moment';
 import DisplayTimings from '../../components/displayTimings/DisplayTimings';
-import validate from './TimeValidation';
+import validation from './Validation';
 
 const userValue = localStorage.getItem("user") === "undefined" ? null : JSON.parse(localStorage.getItem("user"))
     
@@ -25,7 +25,7 @@ const AssociateBooking=()=> {
   const [minStarttime,setminStarttime] = useState(new Date());
   const [maxEndtime,setmaxEndtime] = useState(new Date());
   const [times,setTimes] = useState([]) //for storing start and endtimes
-
+  const [formErrors, setFormErrors] = useState({});
   //useEffect -1 
     useEffect(() => {
     const fetchHalls = async () => {
@@ -101,11 +101,21 @@ const AssociateBooking=()=> {
   const PostData= async (event) => {
     event.preventDefault();
     try {
+
       let temp1 = moment(date).format('DD/MM/YYYY');
       let tempArray= temp1.split("/");
-      let temp2=starttime.setFullYear(tempArray[2], tempArray[1], tempArray[0]);
-      let temp3=endtime.setFullYear(tempArray[2], tempArray[1], tempArray[0])
-      console.log(tempArray);
+      tempArray[1]--;
+      starttime.setDate(tempArray[0]);
+      starttime.setMonth(tempArray[1]);
+      starttime.setFullYear(tempArray[2]);
+
+      endtime.setDate(tempArray[0]);
+      endtime.setMonth(tempArray[1]);
+      endtime.setFullYear(tempArray[2]);
+
+      var obj = {title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime     
+          }  
+        setFormErrors(validation(obj))
       //validate();
     //   const response=await axios.post(`/bookings`, {
     //     associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:temp2,endtime:temp3     
@@ -152,7 +162,7 @@ const AssociateBooking=()=> {
 
             <Card>
               <CardContent>
-                <form>
+                <form onSubmit={PostData}>
                   <Grid
                     container
                     spacing={1}
@@ -162,11 +172,11 @@ const AssociateBooking=()=> {
                     <Grid item xs={12} sm={6}>
                       <TextField
                         label="Title" name="title" 
-                         placeholder="Title" value={title} onChange={handleTitle}
+                         placeholder="Title" value={title} onChange={handleTitle} error={formErrors.showtitle}
+                         //helperText={formErrors.title}
                         fullWidth
-                        required
                       />
-                      
+                      <Typography sx={{fontSize:"15px",color:"red"}}>{formErrors.title}</Typography>   
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
@@ -179,7 +189,8 @@ const AssociateBooking=()=> {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             name="hall" 
-                            label="Hall" value={hall} onChange={handleChange}                          
+                            label="Hall" value={hall} onChange={handleChange}  error={formErrors.showhall}
+                            //helperText={formErrors.hall}                          
                             required
                           >
                              {allHalls?.map((hall,key)=>(
@@ -188,6 +199,8 @@ const AssociateBooking=()=> {
                           </Select>
                         </FormControl>
                       </Box>
+                      <Typography sx={{fontSize:"15px",color:"red"}}>{formErrors.hall}</Typography>
+                      
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
@@ -201,9 +214,10 @@ const AssociateBooking=()=> {
                           minDate={new Date()}
                           maxDate={addDays(new Date(), 20)} 
                           shouldDisableDate={isWeekend}
-                          value={date} 
-                          onChange={(event) => {
-                            setDate(event.target.value); 
+                          value={date} error={formErrors.showdate}
+                          helperText={formErrors.date} sx={{marginTop:"10px"}}
+                          onChange={(newValue) => {
+                            setDate(newValue); 
                           }}
                           renderInput={(params) => <TextField {...params} />}
                         />
@@ -231,7 +245,8 @@ const AssociateBooking=()=> {
             <TimePicker
           renderInput={(params) => <TextField {...params} />}
           value={starttime}
-          label="Start time" name="starttime" 
+          label="Start time" name="starttime" error={formErrors.showstarttime}
+          helperText={formErrors.starttime}
           onChange={(starttime) => {
             setStarttime(starttime);
             
@@ -243,7 +258,8 @@ const AssociateBooking=()=> {
         <Grid item xs={12} sm={6}>
     <TimePicker 
           renderInput={(params) => <TextField {...params} />}
-          label="End time" name="endtime"
+          label="End time" name="endtime" error={formErrors.showendtime}
+          helperText={formErrors.endtime}
           value={endtime} 
           onChange={(endtime) => {
             setEndtime(endtime);
@@ -260,7 +276,7 @@ const AssociateBooking=()=> {
                         type="submit"
                         color="primary"
                         variant="contained"
-                        fullWidth onClick={PostData}
+                        fullWidth 
                       >
                         Submit
                       </Button>
