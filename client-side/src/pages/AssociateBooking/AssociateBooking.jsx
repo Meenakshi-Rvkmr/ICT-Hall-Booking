@@ -119,11 +119,12 @@ const AssociateBooking=()=> {
       const response=await axios.post(`/bookings`, {
         associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime     
       });
+      alert("Booking Successful!");
+     window.location.replace("/calendar");
      setHall(response.data.hall);
     }
     } catch (err) {}
   }
-
    
     return (
       <>
