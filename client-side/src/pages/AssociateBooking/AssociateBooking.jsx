@@ -13,7 +13,7 @@ import DisplayTimings from '../../components/displayTimings/DisplayTimings';
 import validation from './Validation';
 
 const userValue = localStorage.getItem("user") === "undefined" ? null : JSON.parse(localStorage.getItem("user"))
-    
+  
 const AssociateBooking=()=> {
  
   const [title,setTitle] = useState('');
@@ -119,9 +119,11 @@ const AssociateBooking=()=> {
       const response=await axios.post(`/bookings`, {
         associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime     
       });
+      
       alert("Booking Successful!");
      window.location.replace("/calendar");
      setHall(response.data.hall);
+     
     }
     } catch (err) {}
   }
@@ -132,7 +134,7 @@ const AssociateBooking=()=> {
           <AppBar position="static">
             <Toolbar>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              {userValue.username}
+              {userValue.username} 
               </Typography>
               <Typography variant="h6" component="div">
                {userValue._id}
