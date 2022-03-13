@@ -85,7 +85,7 @@ function textstyle1(){
 
 function containerstyle1(){
     customStyle = {        
-         width: '70%',
+         width: '82%',
          marginTop: '25px',
          marginBottom: '25px',
          boxShadow : 2
