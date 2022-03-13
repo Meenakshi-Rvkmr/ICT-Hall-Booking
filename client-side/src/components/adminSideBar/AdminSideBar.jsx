@@ -64,6 +64,7 @@ let AdminSideBar = () => {
             button
             key="Schedule a Meeting"
             sx={{  padding: "15px"}}
+            component={Link} to="/schedule"
           >
             <ListItemIcon>
             <Avatar sx={{bgcolor:pink[500]}}> <EventAvailableIcon /></Avatar>           
