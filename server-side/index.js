@@ -4,7 +4,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const fs = require("fs");
 const multer = require("multer");
+const nodemailer = require("nodemailer")
 
+require("dotenv").config()
 const path = require("path");
 const bookingRoute = require("./routes/Bookings");
 const loginRoute = require("./routes/Login");
@@ -59,6 +61,36 @@ app.delete("/api/hall/deleteimage/:imagename", function (req, res) {
     return res.status(200).send("Successfully! Image has been Deleted");
   }
 });
+
+//send mail on confirmation
+app.post('send_mail',async(req,res)=>{
+  let {text} =req.body;
+  const transport = nodemailer.createTransport({
+    host:process.env.MAIL_HOST,
+    port:process.env.MAIL_PORT,
+    auth:{
+      user:process.env.MAIL_USER,
+      pass:process.env.MAIL_PASS
+    }
+  })
+
+  await transport.sendMail({
+    from:process.env.MAIL_FROM,
+    to:"roshinsrs@gmail.com",
+    subject:"test mail",
+    html:`<div className="email" style="
+      border:1px solid black;
+      padding:20px;
+      font-family:sans-serif;
+      line-height:2;
+      font-size:20px;"
+      >
+      <h2>Here is your mail</h2>
+      <p>${text}</p>
+      <p>All the best,Darwin</p>
+    </div>`
+  })
+})
 
 app.use("/api/bookings", bookingRoute);
 app.use("/api/user", loginRoute);

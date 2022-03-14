@@ -1,4 +1,4 @@
-
+.env
 client-side/node_modules/
 server-side/node_modules/
 client-side/node_modules/.cache/default-development/0.pack

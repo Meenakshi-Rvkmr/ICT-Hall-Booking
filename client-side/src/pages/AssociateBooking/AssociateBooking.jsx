@@ -11,7 +11,7 @@ import axios from 'axios';
 import moment from 'moment';
 import DisplayTimings from '../../components/displayTimings/DisplayTimings';
 import validation from './Validation';
-
+import AlertDialog from '../../components/popupBooking/popupBooking';
 const userValue = localStorage.getItem("user") === "undefined" ? null : JSON.parse(localStorage.getItem("user"))
   
 const AssociateBooking=()=> {
@@ -26,6 +26,9 @@ const AssociateBooking=()=> {
   const [maxEndtime,setmaxEndtime] = useState(new Date());
   const [times,setTimes] = useState([]) //for storing start and endtimes
   const [formErrors, setFormErrors] = useState({});
+
+  const [open, setOpen] = useState(false)  
+  const [isSubmit,setisSubmit]=useState(false)
   
   //useEffect -1 
     useEffect(() => {
@@ -114,15 +117,16 @@ const AssociateBooking=()=> {
 
       var obj = {title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime}  
       setFormErrors(validation(obj,times))
-      
+      console.log(`isSubmit`,isSubmit)
+      console.log(`validation(obj,times)`,validation(obj,times))
       if(formErrors.status){
       const response=await axios.post(`/bookings`, {
         associateName:userValue.username,ICTAKID:userValue._id,title:title,hall:hall,date:temp1,starttime:starttime,endtime:endtime     
       });
       
-      alert("Booking Successful!");
-     window.location.replace("/calendar");
-     setHall(response.data.hall);
+     
+     setisSubmit(true)
+     console.log(`isSubmit-2`,isSubmit)
      
     }
     } catch (err) {}
@@ -130,6 +134,8 @@ const AssociateBooking=()=> {
    
     return (
       <>
+      {isSubmit && <AlertDialog/>}
+      
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position="static">
             <Toolbar>
@@ -277,7 +283,7 @@ const AssociateBooking=()=> {
         minTime={minStarttime}
         maxTime={maxEndtime}
         />
-        {/* <Typography>{formErrors.endtime}</Typography> */}
+        
         </Grid>
      </LocalizationProvider>
         </Grid>  
